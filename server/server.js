@@ -1,15 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+mongoose.connect("mongodb://localhost/invoiceLab")
+.then(() => {console.log("Connection successful!")})
+.catch(e => {console.log("Connection failed: " + e)})
+
 const app = express();
 
+// const port = process.env.PORT;
 
-const port = process.env.PORT;
-app.listen(port, (err) => {
-    if (err) return console.log(err);
+// app.listen(port, (err) => {
+//     if (err) return console.log(err);
 
-    console.log("Up and running on http://127.0.0.1:" + port);
-})
+//     console.log("Up and running on http://127.0.0.1:" + port);
+// })
 
 
 // const http = require('http');
