@@ -1,26 +1,47 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require("./Models/User")
 
-mongoose.connect("mongodb://localhost/invoiceLab")
+mongoose.connect(process.env.DATABASE_REF, {useNewUrlParser: true} )
 .then(() => {console.log("Connection successful!")})
 .catch(e => {console.log("Connection failed: " + e)})
 
+const app = express();
 
+app.use(exprees.json());
+
+const usersRouter = require('./Routes/users');
+
+app.listen(8000, () => console.log('Express launched!'));
+
+
+
+
+
+
+
+
+
+
+
+
+// mongoose testing
 run();
 
 async function run(){
-  // try{
-  //   const user = await User.create({
-  //     firstName: "Zsolt",
-  //     lastName: "Allen",
-  //     email: "zsoltallen@test.com",
-  //   });
-  //   await user.save().then(() => {console.log("User saved");})
-  // }
-  // catch(e){
-  //   console.log(e.message);
-  // }
+//   try{
+//     const user = await User.create({
+//       firstName: "David",
+//       lastName: "Bateman",
+//       email: "davidbateman@test.com",
+//     });
+//     await user.save().then(() => {console.log("User saved");})
+//   }
+//   catch(e){
+//     console.log(e.message);
+//   }
   // console.log(User.find()); // -all data  | .find({"name": /.*m.*/}) - regex
   
   // const user = await User.where("firstName").equals("Zsolt"); //array of all the results + .lt .gt .limit .equals .select | this selects the field to show
@@ -28,15 +49,14 @@ async function run(){
   // console.log(user);
   // user.sayHi();
 
-  const user = await User.findByName("david");
-  console.log(user);
-  console.log(user[0].namedEmail);
+//   const user = await User.findByName("zsolt");
+//   console.log(user);
+//   console.log(user[0].namedEmail);
 
   // const user2 = await User.where().byName("bateman");
   // console.log(user2);
 }
 
-const app = express();
 
 // const port = process.env.PORT;
 
