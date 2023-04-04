@@ -10,17 +10,30 @@ mongoose.connect("mongodb://localhost/invoiceLab")
 run();
 
 async function run(){
-  try{
-    const user = await User.create({
-      firstName: "David",
-      lastName: "Bateman",
-    });
-    // await user.save().then(() => {console.log("User saved");})
-    console.log(user);
-  }
-  catch(e){
-    console.log(e.message);
-  }
+  // try{
+  //   const user = await User.create({
+  //     firstName: "Zsolt",
+  //     lastName: "Allen",
+  //     email: "zsoltallen@test.com",
+  //   });
+  //   await user.save().then(() => {console.log("User saved");})
+  // }
+  // catch(e){
+  //   console.log(e.message);
+  // }
+  // console.log(User.find()); // -all data  | .find({"name": /.*m.*/}) - regex
+  
+  // const user = await User.where("firstName").equals("Zsolt"); //array of all the results + .lt .gt .limit .equals .select | this selects the field to show
+  // const user = await User.findOne({firstName: "Zsolt"}); //array of all the results + .lt .gt .limit .equals .select | this selects the field to show
+  // console.log(user);
+  // user.sayHi();
+
+  const user = await User.findByName("david");
+  console.log(user);
+  console.log(user[0].namedEmail);
+
+  // const user2 = await User.where().byName("bateman");
+  // console.log(user2);
 }
 
 const app = express();
