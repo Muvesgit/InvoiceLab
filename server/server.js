@@ -1,9 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const User = require("./Models/User")
 
 mongoose.connect("mongodb://localhost/invoiceLab")
 .then(() => {console.log("Connection successful!")})
 .catch(e => {console.log("Connection failed: " + e)})
+
+
+run();
+
+async function run(){
+  try{
+    const user = await User.create({
+      firstName: "David",
+      lastName: "Bateman",
+    });
+    // await user.save().then(() => {console.log("User saved");})
+    console.log(user);
+  }
+  catch(e){
+    console.log(e.message);
+  }
+}
 
 const app = express();
 
