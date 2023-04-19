@@ -1,20 +1,28 @@
-require('dotenv').config();
-
-const express = require('express');
-const mongoose = require('mongoose');
-const User = require("./Models/User")
+require('dotenv').config()
+const express = require('express')
+const mongoose = require('mongoose')
 
 mongoose.connect(process.env.DATABASE_REF, {useNewUrlParser: true} )
 .then(() => {console.log("Connection successful!")})
 .catch(e => {console.log("Connection failed: " + e)})
 
-const app = express();
+const dbConnection = mongoose.connection
+dbConnection.on('error', (error) => console.error(error))
 
-app.use(exprees.json());
+// app definitions and components
+const app = express()
+app.use(express.json())
 
-const usersRouter = require('./Routes/users');
+// models
+const User = require("./Models/User")
 
-app.listen(8000, () => console.log('Express launched!'));
+
+// routers
+const usersRouter = require('./Routes/Users')
+app.use('/Users', usersRouter)
+
+// launch
+app.listen(8000, () => console.log('Express launched!'))
 
 
 
