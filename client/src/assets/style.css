@@ -1,11 +1,16 @@
 /* 
 
-highlight color (teal): #37d49d
-grey: #b2b2b2
 
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('primeicons/primeicons.css');
+
+
+:root {
+  --teal: #37d49d;
+  --prefGrey: #b2b2b2;
+}
 
 *{
   font-family: 'Oswald', sans-serif;
@@ -43,7 +48,7 @@ body{
 }
 
 .navigation a:hover{
-  color: #37d49d;
+  color: var(--teal);
   text-decoration: underline;
 }
 
@@ -52,7 +57,7 @@ body{
 .classyFooter{
   height: 2vw;
   width: 100%;
-  background-color: #37d49d;
+  background-color: var(--teal);
   margin: 0;
   display: flex;
   justify-content: center;
@@ -64,30 +69,145 @@ body{
   font-size: 1vw;
 }
 
+/* message board */
+
+.messageBoard{
+  background-color: white;
+  /* border-bottom: 5px solid var(--teal); */
+  /* border-left: 3px solid var(--teal); */
+  box-shadow: -10px 10px 25px var(--teal);
+  position: fixed;
+  z-index: 100;
+  top: 7vw;
+  right: 2vw;
+  width: 25vw;
+  height: 6vw;
+  opacity: 1;
+}
+
+.messageBoard div{
+  display: flex;
+  justify-content: space-between;
+}
+
+.messageBoard h2{
+  margin: .5vw 0 0 .5vw;
+  font-size: .9vw;
+  font-weight: 400;
+  color: black;
+}
+
+.messageBoard span{
+  margin: .5vw .5vw 0 0;
+  font-size: 1vw;
+  font-weight: 600;
+  color: black;
+  cursor: pointer;
+}
+
+.messageBoard span:hover{
+  color: var(--prefGrey);
+}
+
+.messageBoard h1{
+  margin: .5vw .5vw 0 .5vw;
+  font-size: 1vw;
+  font-weight: 500;
+  color: black;
+}
+
+.messageBoardTimer{
+  background-color: var(--teal);
+  position: fixed;
+  z-index: 100;
+  top: 12.8vw;
+  right: 2vw;
+  width: 0vw;
+  height: 0.3vw;
+  opacity: 1;
+}
+
+.timer-slide-enter-active {
+  transition: width 6s ease-out, opacity .3s ease-out;
+}
+
+/* .timer-slide-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+} */
+
+.timer-slide-enter-from,
+.timer-slide-leave-to {
+  width: 25vw;
+  opacity: 0;
+}
+
+.message-slide-enter-active {
+  transition: all .3s ease-out;
+}
+
+/* .timer-slide-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+} */
+
+.message-slide-enter-from,
+.message-slide-leave-to {
+  opacity: 0;
+}
+
 /* about */
 .centeredTextWall{
-  width: 80%;
+  width: 100%;
   text-align: justify;
-  margin: 2vw auto 0 auto;
-  min-height: 38.25vw;
+  min-height: 50vw;
+  background-image: url("./img/tealbg.jpg");
 }
 
 .centeredTextWall h1{
   margin: 0;
-  font-size: 2vw;
-  font-weight: 400;
+  font-size: 3vw;
+  font-weight: 500;
+  color: white;
 }
 
-.centeredTextWall p{
-  font-weight: 300;
-  font-size: 1.2vw;
+.centeredTextWall h2{
+  font-weight: 200;
+  font-size: 1.5vw;
+  color: white;
+}
+
+.centeredTextWall div{
+  padding-top: 10vw;
+  padding-left: 10vw;
+}
+
+.centeredTextWall .primaryButton{
+  margin: 5vw auto 5vw auto;
+  padding: 0;
+  width: 20vw;
+}
+
+.centeredTextWall a{
+  text-decoration: none;
+}
+
+.aboutPage .centeredTextWall{
+  background-image: none;
+}
+
+.aboutPage .centeredTextWall h1, .aboutPage .centeredTextWall h2{
+  color: black;
+}
+
+.aboutPage .centeredTextWall{
+  width: 90%;
+  margin: 2vw auto 2vw auto;
 }
 
 /* authentication page */
 .centeredBoxWall{
   width: 80%;
   text-align: justify;
-  margin: 2vw auto 0 auto;
+  margin: 2vw auto 5vw auto;
   min-height: 38.25vw;
   display: flex;
   justify-content: center;
@@ -105,11 +225,11 @@ body{
 }
 
 .authBox{
-  border: 1px solid #b2b2b2;
+  border: 1px solid var(--prefGrey);
   width: 35vw;
-  height: 25vw;
+  height: auto;
   border-radius: 30px;
-  box-shadow: 20px 20px 30px #b2b2b2;
+  box-shadow: 20px 20px 30px var(--prefGrey);
   display: flex;
   flex-direction: column;
 }
@@ -129,7 +249,150 @@ body{
   flex-direction: column;
 }
 
+/* profile page */
+.profileTopSection{
+  display: flex;
+  margin: 5vw auto 5vw auto;
+  width: 70%;
+}
 
+.profileCard{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  width: 50%;
+  box-shadow: -10px 10px 10px 5px var(--prefGrey);
+}
+
+.profileCard img{
+  height: 5vw;
+  width: 5vw;
+  margin: 1vw 1vw 1vw 1vw;
+}
+
+.profileCard div{
+  margin: 1vw 0 1vw 0;
+  padding: 0 1vw 0 1vw;
+  border-left: 1px solid var(--prefGrey);
+}
+
+.profileCard div h1{
+  margin: 0;
+}
+
+.profileCard div h2{
+  font-size: 1vw;
+  font-weight: 300;
+  margin: 0;
+}
+
+.companyCard{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  width: 50%;
+  box-shadow: -10px 10px 10px 5px var(--prefGrey);
+}
+
+.companyCard img{
+  height: 5vw;
+  width: 5vw;
+  margin: 1vw 1vw 1vw 1vw;
+}
+
+.companyCard div{
+  margin: 1vw 0 1vw 0;
+  padding: 0 1vw 0 1vw;
+  border-left: 1px solid var(--prefGrey);
+}
+
+.companyCard div h1{
+  margin: 0;
+}
+
+.companyCard div h2{
+  font-size: 1vw;
+  font-weight: 300;
+  margin: 0;
+}
+
+.profileBottomSection{
+  display: flex;
+  margin: 5vw auto 5vw auto;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerSection{
+  width: 40%;
+  margin: 0 auto 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.contentSection{
+  /* display: flex; */
+  min-height: 30vw;
+  margin: 2vw auto 2vw auto;
+  border-radius: 10px;
+  background-color: white;
+  width: 100%;
+  box-shadow: -10px 10px 10px 5px var(--prefGrey);
+}
+
+.contentSection div{
+  margin: 1vw 1vw 1vw 1vw;
+}
+
+.arrowWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrowWrapper i{
+  margin: 0 2vw 0 2vw;
+  cursor: pointer;
+  font-size: 2vw;
+  transition: .3s color;
+}
+
+.arrowWrapper i:hover{
+  color: var(--teal);
+}
+
+/* invoice creator */
+#invoice{
+  background-color: white;
+}
+
+.creatorTab{
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.optionSection{
+  padding: 2vw 5vw 5vw 5vw; 
+  width: 50%;
+}
+
+.generatedSection{
+  border-left: 1px solid var(--prefGrey);
+  width: 50%;
+  background-color: var(--prefGrey);
+}
+
+.p-accordion{
+  width: 40vw;
+}
+
+.actionButtons{
+  display: flex;
+  justify-content: space-between;
+}
 
 
 
@@ -141,8 +404,23 @@ body{
   justify-content: center;
 }
 
-.primaryButton{
-  background-color: #37d49d;
+.centeredButtonSection h2{
+  font-size: .9vw;
+  font-weight: 400;
+}
+
+.centeredButtonSection span{
+  color: var(--teal);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.centeredButtonSection span:hover{
+  color: var(--prefGrey);
+}
+
+.primaryButton, .smallPrimaryButton{
+  background-color: var(--teal);
   width: 10vw;
   height: 5vw;
   margin-top: 1vw;
@@ -154,17 +432,343 @@ body{
   transition: background-color .3s
 }
 
-.primaryButton h1{
+.primaryButton h1, .smallPrimaryButton h1{
   margin: 0;
   color: #000;
   font-size: 2vw;
   transition: color .3s;
 }
 
-.primaryButton:hover{
+.primaryButton:hover, .smallPrimaryButton:hover{
   background-color: black;
 }
 
-.primaryButton:hover > h1{
+.primaryButton:hover > h1, .smallPrimaryButton:hover > h1{
   color: white;
 }
+
+.smallPrimaryButton{
+  width: 5vw;
+  height: 2vw;
+}
+
+.smallPrimaryButton h1{
+  font-size: .9vw;
+  font-weight: 400;
+}
+
+
+.secondaryButton, .smallSecondaryButton{
+  background-color: var(--prefGrey);
+  width: 10vw;
+  height: 5vw;
+  margin-top: 1vw;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color .3s
+}
+
+.secondaryButton h1, .smallSecondaryButton h1{
+  margin: 0;
+  color: #000;
+  font-size: 2vw;
+  transition: color .3s;
+}
+
+.secondaryButton:hover, .smallSecondaryButton:hover{
+  background-color: black;
+}
+
+.secondaryButton:hover > h1, .smallSecondaryButton:hover > h1{
+  color: white;
+}
+
+.smallSecondaryButton{
+  width: 5vw;
+  height: 2vw;
+}
+
+.smallSecondaryButton h1{
+  font-size: .9vw;
+  font-weight: 400;
+}
+
+
+
+
+
+
+
+
+/* TEMP */
+
+/* invoice template redesign */
+
+#invoice img{
+  width: auto;
+  height: 5vw;
+}
+
+/* #invoice2 img{
+  width: auto;
+  height: 100px;
+}
+
+#invoice2 .p-datatable-thead{
+  font-size: 10px;
+}
+
+#invoice2 .p-datatable-tbody{
+  font-size: 9px;
+}
+
+#invoice2 .p-datatable-tfoot{
+  font-size: 9px;
+}
+
+#invoice2 .p-datatable .p-datatable-thead > tr > th{
+  padding: 0.2rem 1rem;
+}
+#invoice2 .p-datatable .p-datatable-tbody > tr > td{
+  padding: 0.2rem 1rem;
+}
+#invoice2 .p-datatable .p-datatable-tfoot > tr > td{
+  padding: 0.2rem 1rem;
+} */
+
+.invoiceCard{
+  background-color: white;
+  width: 85%;
+  margin: 3vw auto 3vw auto;
+  padding: .5vw;
+  box-shadow: 10px 10px 10px var(--prefGrey);
+}
+
+.invDivider{
+  display: flex;
+  font-size: .7vw;
+  background-color: white;
+  justify-content: space-between;
+}
+
+.invDivider2{
+  display: flex;
+  font-size: .7vw;
+  background-color: white;
+}
+
+.invImg{
+  width: 50%;
+}
+
+.invDocInfo{
+  width: 50%;
+}
+
+.invDocInfo h1{
+  font-size: 1.5vw;
+  font-weight: 700;
+}
+
+/* #invoice2 .invDocInfo h1{
+  font-size: 25px;
+} */
+
+.invDocInfo h2{
+  font-size: .8vw;
+  font-weight: 400;
+}
+
+/* #invoice2 .invDocInfo h2{
+  font-size: 15px;
+} */
+
+.invDocInfo div{
+  display: flex;
+  justify-content: space-between;
+}
+
+.totalRow{
+  background-color: var(--teal);
+  -webkit-print-color-adjust: exact;
+}
+
+.totalRow h1{
+  color: white;
+  padding-left: .5vw;
+  padding-right: .5vw;
+  font-size: .9vw;
+}
+
+/* #invoice2 .totalRow h1{
+  font-size: 20px;
+} */
+
+.companyInfo{
+  width: 45%;
+}
+
+.companyInfo h1{
+  font-size: .8vw;
+  font-weight: 600;
+  border-bottom: 1px solid var(--teal);
+}
+
+/* #invoice2 .companyInfo h1{
+  font-size: 15px;
+} */
+
+.companyInfo h2{
+  font-size: 1vw;
+  font-weight: 700;
+}
+
+/* #invoice2 .companyInfo h2{
+  font-size: 12px;
+} */
+
+.companyInfo h3{
+  font-size: .7vw;
+  font-weight: 500;
+}
+
+/* #invoice2 .companyInfo h3{
+  font-size: 9px;
+  font-weight: 500;
+} */
+
+.companyInfo h3 span{
+  font-weight: 400;
+}
+
+.dataTableDiv{
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  border-top: 1px solid var(--teal);
+  border-bottom: 1px solid var(--teal);
+}
+
+.totalRows{
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  border-right: 1px solid var(--teal);
+  padding-right: .5vw;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+}
+
+.invDivider2 .totalRows h2{
+  font-weight: 500; 
+  font-size: .7vw;
+}
+
+.totalRows h1{
+  font-weight: 700; 
+  font-size: 1.2vw;
+}
+
+#invoice2 .invDivider2 .totalRows h1{
+  font-size: 20px;
+}
+
+.signSection{
+  padding-top: 1vw;
+  margin-left: .5vw;
+} 
+
+.signSection h2{
+  font-weight: 500;
+  font-size: .7vw;
+}
+
+.totalRows{
+  display: flex;
+  justify-content: space-between;
+}
+
+.tot
+
+.chitBox{
+  border: 1px solid var(--teal);
+  margin-top: 1vw;
+}
+
+.chitHeader{
+  text-align: center;
+  margin-top: 1vw;
+}
+
+.chitHeader h1{
+  font-size: 1vw;
+  font-weight: 700;
+}
+
+/* #invoice2 .chitHeader h1{
+  font-size: 20px;
+} */
+
+.chitHeader h2{
+  font-size: .8vw;
+  font-weight: 400;
+}
+
+#invoice2 .chitHeader h2{
+  font-size: 12px;
+}
+
+.chitSigner{
+  font-size: .9vw;
+  margin-top: 1vw;
+}
+
+/* #invoice2 .chitSigner{
+  font-size: 10px;
+} */
+
+.invFooterBox{
+  margin-top: 1vw;
+  background-color: #ebebeb;
+  -webkit-print-color-adjust: exact;
+  padding: .3vw;
+  display: flex;
+}
+
+.smallDetails{
+  width: 50%;
+}
+
+.mentionBox{
+  width: 50%;
+}
+
+.invFooterBox h1{
+  font-size: .6vw;
+  font-weight: 600;
+}
+
+/* #invoice2 .invFooterBox h1{
+  font-size: 9px;
+} */
+
+.invFooterBox h2{
+  font-size: .5vw;
+  font-weight: 400;
+}
+
+/* #invoice2 .invFooterBox h2{
+  font-size: 7px;
+} */
+
+.invFooterBox h3{
+  font-size: .35vw;
+  font-weight: 400;
+}
+/* 
+#invoice2 .invFooterBox h3{
+  font-size: 6px;
+  font-weight: 400;
+} */

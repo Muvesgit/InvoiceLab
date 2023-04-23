@@ -21,18 +21,52 @@ router.get('/:id', getUserById, (req, res) =>{ //this route calls a middleware
 	res.send(res.user)
 })
 
-// create
+// register
 router.post('/', async (req, res) =>{
+	let existingUser = await User.findOne({ email : req.body.email.toLowerCase() });
+	if(existingUser){
+		return res.status(409).json({ message: "A User with this email address already exists! Please provide a different one!" }) //409 - conflicting data
+	}
+
 	const user = new User({
-		// TO DO: fill with all necessary data and make checks
-	})
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		email: req.body.email,
+	});
+	user.setPassword(req.body.password);
 
 	try{
 		const newUser = await user.save();
 		res.status(201).json(newUser) //201 - successfully create smth
 	}
-	catch(error){
+	catch(err){
+		console.log(err);
 		res.status(400).json({ message: err.message }) //400 - bad data
+	}
+})
+
+router.post('/login', async (req, res) =>{
+	try{
+		let user = await User.findOne({ email : req.body.email.toLowerCase() });
+
+		if (user.validatePassword(req.body.password)) {
+			return res.status(201).json({
+				message : "Log in successful!",
+				status : 201,
+				user: user
+			})
+		}
+		else {
+			return res.status(400).json({
+				message : "The password You have provided does not correspond with the email address."
+			});
+		}
+	}
+	catch(err){
+		console.log(err);
+		return res.status(400).json({
+			message : "The email address You have provided could not be found."
+		});
 	}
 })
 

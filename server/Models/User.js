@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 // model schema  used for the database
 const userSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -15,6 +22,7 @@ const userSchema = new mongoose.Schema({
     }
   },
   password: String,
+  salt: String,
   confirmed: Boolean,
   createdAt: {
     type: Date,
@@ -32,9 +40,9 @@ const userSchema = new mongoose.Schema({
 })
 
 
-userSchema.methods.sayHi = function () {
-  console.log(`Hi! My name is ${this.firstName}.`)
-}
+// userSchema.methods.sayHi = function () {
+//   console.log(`Hi! My name is ${this.firstName}.`)
+// }
 
 userSchema.statics.findByName = async function (name){
   let lName = await this.find({lastName: new RegExp(name, 'i')});
@@ -42,6 +50,22 @@ userSchema.statics.findByName = async function (name){
 
   return (lName.length == 0) ? fName : lName;
 }
+
+// userSchema.statics.findByEmail = async function (address){
+//   let user = await this.find({email: new RegExp(address, 'i')});
+
+//   return user;
+// }
+
+userSchema.methods.setPassword = function(password) {
+  this.salt = crypto.randomBytes(16).toString('hex');
+  this.password = crypto.pbkdf2Sync(password, this.salt, 1000, 64, `sha512`).toString(`hex`);
+};
+
+userSchema.methods.validatePassword = function(password) {
+  let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, `sha512`).toString(`hex`);
+  return this.password === hash;
+}; 
 
 // userSchema.query.byName = async function (name){
 //   let lName = await this.where({lastName: new RegExp(name, 'i')});
