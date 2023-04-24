@@ -1,5 +1,5 @@
 <template>
-<div>
+<div @click="clickListener($event)">
 	<MessageWindow v-if="messageBoardContent" :message="messageBoardContent"/>
 
 	<div class="creatorTab">
@@ -7,7 +7,35 @@
 			<h1>Create your invoice</h1>
 			<Accordion :multiple="true" :activeIndex="[0]">
 				<AccordionTab header="Invoice Information">
-					<h1>Document Type, Number and Date</h1>
+					<div class="accordionSection">
+						<div class="row">
+
+							<div class="column">
+								<h1>Document Type</h1>
+
+								<div class="dropdownWrap">
+									<div class="dropdownHeader" @click="() => {(dropdownVisibility[0]) ? dropdownVisibility[0]++ : dropdownVisibility[0]--}">
+										<h1 v-if="selectedType"> {{ selectedType.name }} </h1>
+										<h2 v-else>Choose Invoice Type </h2>
+										<i v-if="!dropdownVisibility[0]" class="pi pi-angle-down"></i>
+										<i v-else class="pi pi-angle-up"></i>
+									</div>
+
+									<div v-if="dropdownVisibility[0]" class="dropdownBody">
+										<div class="option" v-for="(item, index) in invoiceTypes" v-bind:key="item.id" @click="() => {selectedType = invoiceTypes[index]; dropdownVisibility[0] = 0}">
+											<h1>{{ item.name }}</h1>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="column">
+								<h1>Document Number</h1>
+
+								<input type="text" v-model="registerEmail" @keyup="validateKeyPress($event, 1)">
+							</div>
+
+						</div>
+					</div>
 				</AccordionTab>
 				<AccordionTab header="Company Information and Logo">
 					<h1>Info and Logo</h1>
@@ -43,7 +71,7 @@
 						
 						<div class="invDocInfo">
 							<div>
-								<h1>DOC NAME</h1>
+								<h1>{{ (selectedType) ? selectedType.name : "DOC TYPE" }}</h1>
 								<h1>NR</h1>
 							</div>
 
@@ -152,16 +180,31 @@ export default{
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		var documentNumber = 0
 		
 		return{
-			loggedUser
+			loggedUser,
+			documentNumber
 		}
 	},
 	data(){
 		return{
 			messageBoardContent: null,
 
-			bottomSectionController: 0
+			bottomSectionController: 0,
+
+			dropdownVisibility: [0],
+			invoiceTypes: [
+				{
+					id: 0,
+					name: "FISCAL INVOICE"
+				},
+				{
+					id: 1,
+					name: "PROFORMA INVOICE"
+				},
+			],
+			selectedType: null,
 		}
 	},
 	watch: {
@@ -190,7 +233,14 @@ export default{
     },
     reloadPage(){
       location.reload();
-    }
+    },
+		clickListener(event){
+			if(event.target.className != "dropdownHeader"){
+				for(let i = 0; i < this.dropdownVisibility.length; ++i){
+					this.dropdownVisibility[i] = 0;
+				}
+			}
+		}
 	}
 }
 </script>

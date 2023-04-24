@@ -46,7 +46,7 @@
 			</div>
 
 			<div class="arrowWrapper">
-				<i class="pi pi-check" @click="() => {(bottomSectionController > 0) ? bottomSectionController-- : bottomSectionController}"></i>
+				<i class="pi pi-arrow-circle-left" @click="() => {(bottomSectionController > 0) ? bottomSectionController-- : bottomSectionController}"></i>
 
 				<div v-if="bottomSectionController == 0" class="contentSection">
 					<div>
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 
-				<i class="pi pi-check" @click="() => {(bottomSectionController < 3) ? bottomSectionController++ : bottomSectionController}"></i>
+				<i class="pi pi-arrow-circle-right" @click="() => {(bottomSectionController < 3) ? bottomSectionController++ : bottomSectionController}"></i>
 			</div>
 		</div>
 		

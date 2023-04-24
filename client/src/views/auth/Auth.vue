@@ -174,6 +174,7 @@ export default{
         .then((res) => {
           this.openMessageBoard(res.message);
         })
+        window.location.reload();
       }
       catch(error){
         this.openMessageBoard(error.message);

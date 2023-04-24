@@ -4,7 +4,7 @@
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
-@import url('primeicons/primeicons.css');
+@import url('../../node_modules/primeicons/primeicons.css');
 
 
 :root {
@@ -158,6 +158,20 @@ body{
   opacity: 0;
 }
 
+.home-slide-enter-active {
+  transition: transform .5s ease-out, opacity .7s ease-out;
+}
+
+/* .timer-slide-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+} */
+
+.home-slide-enter-from,
+.home-slide-leave-to {
+  transform: translateY(300px);
+  opacity: 0;
+}
+
 /* about */
 .centeredTextWall{
   width: 100%;
@@ -176,6 +190,14 @@ body{
 .centeredTextWall h2{
   font-weight: 200;
   font-size: 1.5vw;
+  color: white;
+}
+
+.centeredTextWall h3{
+  display: flex;
+  margin: 0;
+  font-size: 3vw;
+  font-weight: 200;
   color: white;
 }
 
@@ -326,7 +348,7 @@ body{
 .profileBottomSection{
   display: flex;
   margin: 5vw auto 5vw auto;
-  width: 70%;
+  width: 90%;
   display: flex;
   flex-direction: column;
 }
@@ -362,7 +384,7 @@ body{
 .arrowWrapper i{
   margin: 0 2vw 0 2vw;
   cursor: pointer;
-  font-size: 2vw;
+  font-size: 3vw;
   transition: .3s color;
 }
 
@@ -386,6 +408,12 @@ body{
   width: 50%;
 }
 
+.optionSection h1{
+  color: black;
+  font-size: 1vw;
+  margin: 0 0 1vw 0;
+}
+
 .generatedSection{
   border-left: 1px solid var(--prefGrey);
   width: 50%;
@@ -400,6 +428,22 @@ body{
   display: flex;
   justify-content: space-between;
 }
+
+.accordionSection{
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionSection .row{
+  display: flex;
+  justify-content: space-between;
+}
+
+.accordionSection .column{
+  display: flex;
+  flex-direction: column;
+}
+
 
 
 
@@ -510,6 +554,81 @@ body{
   font-size: .9vw;
   font-weight: 400;
 }
+
+/* dropdowns */
+.dropdownWrap{
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
+}
+
+.dropdownHeader{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center ;
+  border: 1px solid var(--prefGrey);
+  border-radius: 5px;
+  cursor: pointer;
+  min-height: 3vw;
+}
+
+.dropdownHeader:focus{
+  border: 1px solid var(--teal);
+}
+
+.dropdownHeader h2{ 
+  color: var(--prefGrey);
+  font-weight: 400;
+  font-size: .9vw;
+  margin: 0 0 0 .5vw;
+  user-select: none;
+}
+
+.dropdownHeader h1{ 
+  color: black;
+  font-weight: 400;
+  font-size: .9vw;
+  margin: 0 0 0 .5vw;
+  user-select: none;
+}
+
+.dropdownHeader i{
+  font-size: 1.5vw;
+  margin-right: .5vw;
+  user-select: none;
+}
+
+.dropdownBody{
+  position: absolute;
+  background-color: white;
+  z-index: 100;
+  height: auto;
+  max-height: 15vw;
+  width: inherit;
+  border: 1px solid var(--prefGrey);
+  overflow-y: scroll;
+  margin-top: 2.9vw;
+}
+
+.dropdownBody .option{
+  display: flex;
+  align-items: center;
+  height: 3vw;
+  cursor: pointer;
+}
+
+.dropdownBody .option:hover{
+  background-color: var(--prefGrey);
+}
+
+.dropdownBody .option h1{
+  margin: 0 0 0 1vw;
+  font-weight: 400;
+}
+
+
+
 
 
 
