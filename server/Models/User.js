@@ -33,16 +33,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: () => Date.now(),
   },
-  // company: companySchema, --to be defined
   company: {},
   products: [],
 
 })
-
-
-// userSchema.methods.sayHi = function () {
-//   console.log(`Hi! My name is ${this.firstName}.`)
-// }
 
 userSchema.statics.findByName = async function (name){
   let lName = await this.find({lastName: new RegExp(name, 'i')});
@@ -50,12 +44,6 @@ userSchema.statics.findByName = async function (name){
 
   return (lName.length == 0) ? fName : lName;
 }
-
-// userSchema.statics.findByEmail = async function (address){
-//   let user = await this.find({email: new RegExp(address, 'i')});
-
-//   return user;
-// }
 
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -84,7 +72,6 @@ userSchema.pre('save', function(next) {
 })
 
 userSchema.post('save', function(doc, next) {
-  doc.sayHi();
   next();
 })
 

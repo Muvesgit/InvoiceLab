@@ -1,5 +1,6 @@
 <template>
-  <MessageWindow v-if="messageBoardContent" v-model:message="messageBoardContent"/>
+<div>
+  <MessageWindow v-if="messageBoardContent" :message="messageBoardContent"/>
 
   <div v-if="!eventBox" class="centeredBoxWall">
     <div class="authBox">
@@ -57,6 +58,7 @@
 
     </div>
   </div>  
+</div>
 </template>
 
 <script>
@@ -93,9 +95,6 @@ export default{
 
   },
   methods:{
-    logger(){
-      console.log("hit");
-    },
     async validatedLogin(){
       let validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -124,9 +123,7 @@ export default{
         })
         .then((response) => response.json())
         .then((res) => {
-          console.log(res, res.status);
           if(res.status == 201){
-            console.log(res.user);
             localStorage.setItem("loggedUser", JSON.stringify(res.user));
             window.location.reload();
           }
@@ -175,7 +172,6 @@ export default{
         })
         .then((response) => response.json())
         .then((res) => {
-          console.log(res, res.status);
           this.openMessageBoard(res.message);
         })
       }

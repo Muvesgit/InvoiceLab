@@ -1,5 +1,6 @@
 <template>
-	<MessageWindow v-if="messageBoardContent" v-model:message="messageBoardContent"/>
+<div>
+	<MessageWindow v-if="messageBoardContent" :message="messageBoardContent"/>
 
 	<div v-if="loggedUser">
 		<div class="profileTopSection">
@@ -30,16 +31,16 @@
 
 		<div class="profileBottomSection">
 			<div class="headerSection">
-				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 0}">
+				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 0}" v-bind:class="{focusedPrimaryButton : bottomSectionController == 0}">
 					<h1>Clients</h1>
 				</div>
-				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 1}">
+				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 1}" v-bind:class="{focusedPrimaryButton : bottomSectionController == 1}">
 					<h1>Products</h1>
 				</div>
-				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 2}">
+				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 2}" v-bind:class="{focusedPrimaryButton : bottomSectionController == 2}">
 					<h1>Statistics</h1>
 				</div>
-				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 3}">
+				<div class="smallPrimaryButton" @click="() => {bottomSectionController = 3}" v-bind:class="{focusedPrimaryButton : bottomSectionController == 3}">
 					<h1>Archives</h1>
 				</div>
 			</div>
@@ -82,6 +83,7 @@
 	</div>
 
 	<UserAuth v-else />
+</div>
 </template>
 
 <script>
@@ -96,7 +98,6 @@ export default{
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		console.log(loggedUser);
 		
 		return{
 			loggedUser

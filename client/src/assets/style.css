@@ -36,7 +36,7 @@ body{
 }
 
 .navigation img{
-  width: 16vw;
+  width: 12vw;
   height: auto;
 }
 
@@ -50,6 +50,10 @@ body{
 .navigation a:hover{
   color: var(--teal);
   text-decoration: underline;
+}
+
+.navigation .selectedNavElement{
+  color: var(--teal);
 }
 
 /* footer */
@@ -181,13 +185,16 @@ body{
 }
 
 .centeredTextWall .primaryButton{
-  margin: 5vw auto 5vw auto;
   padding: 0;
   width: 20vw;
+  margin: 0;
 }
 
 .centeredTextWall a{
+  margin: 5vw auto 5vw auto;
   text-decoration: none;
+  width: 20vw;
+  display: flex;
 }
 
 .aboutPage .centeredTextWall{
@@ -402,6 +409,7 @@ body{
 .centeredButtonSection{
   display: flex;
   justify-content: center;
+  margin-top: 1vw;
 }
 
 .centeredButtonSection h2{
@@ -423,7 +431,6 @@ body{
   background-color: var(--teal);
   width: 10vw;
   height: 5vw;
-  margin-top: 1vw;
   border-radius: 30px;
   display: flex;
   justify-content: center;
@@ -455,6 +462,14 @@ body{
 .smallPrimaryButton h1{
   font-size: .9vw;
   font-weight: 400;
+}
+
+.focusedPrimaryButton{
+  background-color: black;
+}
+
+.focusedPrimaryButton h1{
+  color: white;
 }
 
 

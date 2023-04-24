@@ -1,5 +1,6 @@
 <template>
-	<MessageWindow v-if="messageBoardContent" v-model:message="messageBoardContent"/>
+<div>
+	<MessageWindow v-if="messageBoardContent" :message="messageBoardContent"/>
 
 	<div class="creatorTab">
 		<div class="optionSection">
@@ -23,7 +24,7 @@
 			</Accordion>
 
 			<div class="actionButtons">
-				<div class="smallSecondaryButton" @click="() => { window.location.reload(); }">
+				<div class="smallSecondaryButton" @click="reloadPage()">
 					<h1>Reset</h1>
 				</div>
 				<div class="smallPrimaryButton" @click="downloadProcess">
@@ -47,7 +48,7 @@
 							</div>
 
 							<div>
-								<h2>Date: Date</h2>
+								<h2>DATE: DATE</h2>
 								<h2>TVA: 19%</h2>
 							</div>
 
@@ -60,21 +61,21 @@
 
 					<div class="invDivider">
 						<div class="companyInfo">
-							<h1>Company</h1>
-							<h2>Company Name</h2>
+							<h1>COMPANY</h1>
+							<h2>COMPANY NAME</h2>
 							<h3><span>CIF:</span>  RO15730704</h3>
-							<h3><span>Reg. Com:</span>  J26/1148/2003</h3>
-							<h3><span>Adresa:</span>  Mun. Târgu Mureș, Str. 8 Martie, Nr.59, Jud. Mureș</h3>
+							<h3><span>COM. REG:</span>  J26/1148/2003</h3>
+							<h3><span>ADDRESS:</span>  Mun. Târgu Mureș, Str. 8 Martie, Nr.59, Jud. Mureș</h3>
 							<h3><span>IBAN(RON):</span>  RO49BRDE270SV06679802700</h3>
-							<h3><span>Banca:</span>  BRD - GROUPE SOCIETE GENERALE</h3>
+							<h3><span>BANK:</span>  BRD - GROUPE SOCIETE GENERALE</h3>
 						</div>
 
 						<div class="companyInfo">
-							<h1>Client</h1>
-							<h2>Name</h2>
-							<h3><span>info 1:</span>  test</h3>
-							<h3><span>info 2:</span>  test</h3>
-							<h3><span>info 3:</span>  test</h3>
+							<h1>CLIENT</h1>
+							<h2>CLIENT NAME</h2>
+							<h3><span>INFO 1:</span>  TEST</h3>
+							<h3><span>INFO 2:</span>  TEST</h3>
+							<h3><span>INFO 3:</span>  TEST</h3>
 						</div>
 					</div>
 					
@@ -93,9 +94,9 @@
 						<div class="invDivider2">
 							<div class="totalRows">
 								<div>
-									<h2>Total Produse:</h2>
-									<h2>Total TVA:</h2>
-									<h1>Total Factură:</h1>
+									<h2>SUBTOTAL:</h2>
+									<h2>TVA:</h2>
+									<h1>TOTAL:</h1>
 								</div>
 								<div>
 									<h2>X {CURR}</h2>
@@ -113,10 +114,10 @@
 						<div class="invFooterBox">
 							<div class="smallDetails">
 								<h1>Hidromix 2003 SRL</h1>
-								<h2>Capital Social: 200 RON</h2>
+								<h2>Capital: 200 RON</h2>
 								<h2>Telefon: 0365 424 422 ; Fax: 0365 424 423</h2>
 								<h2>Email: hidromix@hidromix.com</h2>
-								<h2>IBAN(EUR): RO13BRDE270SV07159702700 ; Banca: BRD - GROUPE SOCIETE GENERALE</h2>
+								<h2>IBAN(EUR): RO13BRDE270SV07159702700 ; Bank: BRD - GROUPE SOCIETE GENERALE</h2>
 							</div>
 							<div class="mentionBox">
 								<h3 style="white-space: pre-line;">Mention: Message</h3>
@@ -128,6 +129,8 @@
 			</div>
 		</div>
 	</div>
+
+</div>
 </template>
 
 <script>
@@ -149,7 +152,6 @@ export default{
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		console.log(loggedUser);
 		
 		return{
 			loggedUser
@@ -186,6 +188,9 @@ export default{
 				doc.save(docName);
 			});
     },
+    reloadPage(){
+      location.reload();
+    }
 	}
 }
 </script>

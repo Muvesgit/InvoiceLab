@@ -1,5 +1,6 @@
 <template>
-
+<div>
+  
 	<Transition name="message-slide">
 		<div v-if="show" class="messageBoard">
 			<div>
@@ -14,6 +15,8 @@
 	<Transition name="timer-slide">
 		<div v-if="show" class="messageBoardTimer"></div>
 	</Transition>
+
+</div>
 </template>
 <script>
 export default{
