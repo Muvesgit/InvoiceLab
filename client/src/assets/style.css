@@ -437,12 +437,62 @@ body{
 .accordionSection .row{
   display: flex;
   justify-content: space-between;
+  margin-top: 1vw;
 }
 
 .accordionSection .column{
   display: flex;
   flex-direction: column;
 }
+
+.accordionSection .invoiceInput{
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--prefGrey);
+  border-radius: 5px;
+  min-height: 3vw;
+  padding: 0 0 0 .5vw;
+}
+
+.productsTable{
+  display: flex;
+  flex-direction: column;
+}
+
+.productsTableControls{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1vw;
+}
+
+.productsTableControls h1{
+  margin: 0;
+}
+
+.productsTableHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 3vw;
+  padding: 0 .5vw 0 .5vw;
+  border: 1px solid var(--prefGrey);
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: white;
+}
+
+.productsTableHeader h1{
+  font-size: 1vw;
+  margin: 0;
+}
+
+.productsTableBody{
+
+}
+
+
+
 
 
 
@@ -573,7 +623,7 @@ body{
   min-height: 3vw;
 }
 
-.dropdownHeader:focus{
+.dropdownHeader:active {
   border: 1px solid var(--teal);
 }
 
@@ -627,6 +677,17 @@ body{
   font-weight: 400;
 }
 
+/* primevue template rewrites */
+.p-button{
+  background-color: var(--teal) !important;
+  border: 1px solid var(--teal) !important;
+  cursor: pointer;
+}
+
+.p-button:hover{
+  background-color: black !important;
+  border: 1px solid black !important;
+}
 
 
 
@@ -678,7 +739,7 @@ body{
   width: 85%;
   margin: 3vw auto 3vw auto;
   padding: .5vw;
-  box-shadow: 10px 10px 10px var(--prefGrey);
+  box-shadow: 5px 5px 15px black;
 }
 
 .invDivider{
@@ -767,6 +828,8 @@ body{
 .companyInfo h3{
   font-size: .7vw;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* #invoice2 .companyInfo h3{
