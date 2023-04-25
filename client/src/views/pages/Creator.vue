@@ -31,9 +31,22 @@
 							<div class="column">
 								<h1>Document Number</h1>
 
-								<input type="text" v-model="registerEmail" @keyup="validateKeyPress($event, 1)">
+								<input type="text" class="invoiceInput" v-model="documentNumber">
 							</div>
 
+						</div>
+
+						<div class="row">
+							<div class="column">
+								<h1>Document Date</h1>
+
+								<Calendar v-model="documentDate" showIcon />
+							</div>
+							<div class="column">
+								<h1>TVA (%)</h1>
+								
+								<input type="text" class="invoiceInput" v-model="tvaValue">
+							</div>
 						</div>
 					</div>
 				</AccordionTab>
@@ -44,7 +57,24 @@
 					<h1>Client Info</h1>
 				</AccordionTab>
 				<AccordionTab header="Products">
-					<h1>Products</h1>
+					<div class="productsTable">
+						<div class="productsTableControls">
+							<h1>Products</h1>
+
+							<div class="smallPrimaryButton">
+								<h1>Add Product</h1>
+							</div>
+						</div>
+						<div class="productsTableHeader">
+							<h1>Name</h1>
+							<h1>Unit Price</h1>
+							<h1>Quantity</h1>
+							<h1>Quantity Price</h1>
+						</div>
+						<div class="productsTableBody">
+							
+						</div>
+					</div>
 				</AccordionTab>
 				<AccordionTab header="Add Message">
 					<h1>Message</h1>
@@ -72,12 +102,12 @@
 						<div class="invDocInfo">
 							<div>
 								<h1>{{ (selectedType) ? selectedType.name : "DOC TYPE" }}</h1>
-								<h1>NR</h1>
+								<h1>{{ documentNumber }}</h1>
 							</div>
 
 							<div>
-								<h2>DATE: DATE</h2>
-								<h2>TVA: 19%</h2>
+								<h2>DATE: {{ dateOnInvoice }}</h2>
+								<h2>TVA: {{ tvaValue }}%</h2>
 							</div>
 
 							<div class="totalRow">
@@ -94,8 +124,8 @@
 							<h3><span>CIF:</span>  RO15730704</h3>
 							<h3><span>COM. REG:</span>  J26/1148/2003</h3>
 							<h3><span>ADDRESS:</span>  Mun. Târgu Mureș, Str. 8 Martie, Nr.59, Jud. Mureș</h3>
-							<h3><span>IBAN(RON):</span>  RO49BRDE270SV06679802700</h3>
-							<h3><span>BANK:</span>  BRD - GROUPE SOCIETE GENERALE</h3>
+							<h3><span>IBAN(RON):</span>  RO123OTP123123123123</h3>
+							<h3><span>BANK:</span>  OTP </h3>
 						</div>
 
 						<div class="companyInfo">
@@ -141,11 +171,11 @@
 
 						<div class="invFooterBox">
 							<div class="smallDetails">
-								<h1>Hidromix 2003 SRL</h1>
+								<h1>COMPANY NAME</h1>
 								<h2>Capital: 200 RON</h2>
 								<h2>Telefon: 0365 424 422 ; Fax: 0365 424 423</h2>
-								<h2>Email: hidromix@hidromix.com</h2>
-								<h2>IBAN(EUR): RO13BRDE270SV07159702700 ; Bank: BRD - GROUPE SOCIETE GENERALE</h2>
+								<h2>Email: test@test.com</h2>
+								<h2>IBAN(EUR): RO123OTP123123123123 ; Bank: OTP</h2>
 							</div>
 							<div class="mentionBox">
 								<h3 style="white-space: pre-line;">Mention: Message</h3>
@@ -165,26 +195,34 @@
 // packages
 import { jsPDF } from 'jspdf';
 import domtoimage from "dom-to-image";
+import { toRefs, reactive } from 'vue';
 
 // templates
 import MessageWindow from '../support/MessageWindow.vue'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import Calendar from 'primevue/calendar';
+
 
 export default{
 	name: "InvoiceCreator",
 	components: {
 		MessageWindow,
 		Accordion,
-		AccordionTab
+		AccordionTab,
+		Calendar,
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		var documentNumber = 0
 		
+		const documentInfo = reactive({
+			documentNumber: 0,
+			tvaValue: 19
+		})
+
 		return{
 			loggedUser,
-			documentNumber
+			...toRefs(documentInfo)
 		}
 	},
 	data(){
@@ -205,13 +243,18 @@ export default{
 				},
 			],
 			selectedType: null,
+
+			documentDate: new Date(),
+			dateOnInvoice: null,
 		}
 	},
 	watch: {
-
+		documentDate: function(value){
+			this.dateOnInvoice = value.toLocaleDateString("en-US");
+		}
 	},
 	mounted(){
-
+		this.dateOnInvoice = this.documentDate.toLocaleDateString("en-US");
 	},
 	methods:{
     downloadProcess(){
