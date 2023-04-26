@@ -61,18 +61,25 @@
 						<div class="productsTableControls">
 							<h1>Products</h1>
 
-							<div class="smallPrimaryButton">
+							<div class="smallPrimaryButton" @click="addNewProduct()">
 								<h1>Add Product</h1>
 							</div>
 						</div>
 						<div class="productsTableHeader">
+							<h1>Number</h1>
 							<h1>Name</h1>
 							<h1>Unit Price</h1>
 							<h1>Quantity</h1>
 							<h1>Quantity Price</h1>
 						</div>
 						<div class="productsTableBody">
-							
+							<div v-for="product in productsList" v-bind:key="product.id" class="productsTableRow">
+								<h1>{{ product.id }}</h1>
+								<input v-model="product.name" />
+								<input v-model="product.uPrice" />
+								<input v-model="product.quantity" />
+								<h1>{{ product.qPrice }}</h1>
+							</div>
 						</div>
 					</div>
 				</AccordionTab>
@@ -138,16 +145,13 @@
 					</div>
 					
 					<div class="dataTableDiv">
-						<!-- <DataTable :value="" responsiveLayout="scroll">
-							<Column field="Count" header="Nr"></Column>
-							<Column field="Denumire" header="Denumire"></Column>
-							<Column field="UM" header="UM"></Column>
-							<Column field="Cantitate" header="Cantitate"></Column>
-							<Column field="PretUnitar" header="Preț Unitar (RON)"></Column>
-							<Column field="PretCantitate" header="Preț Cant. (RON)"></Column>
-							<Column field="TVA" header="TVA"></Column>
-							<Column field="totalRowPrice" header="Preț Total (RON)"></Column>
-						</DataTable> -->
+						<DataTable :value="productsList">
+							<Column field="id" header="Number"></Column>
+							<Column field="name" header="Name"></Column>
+							<Column field="uPrice" header="Unit Price"></Column>
+							<Column field="quantity" header="Quantity"></Column>
+							<Column field="qPrice" header="Quantity Price"></Column>
+						</DataTable>
 
 						<div class="invDivider2">
 							<div class="totalRows">
@@ -157,9 +161,9 @@
 									<h1>TOTAL:</h1>
 								</div>
 								<div>
-									<h2>X {CURR}</h2>
-									<h2>X {CURR}</h2>
-									<h1>X {CURR}</h1>
+									<h2>{{ invoiceSubtotal }} {CURR}</h2>
+									<h2>{{ invoiceTvaTotal }} {CURR}</h2>
+									<h1>{{ invoiceTotal }} {CURR}</h1>
 								</div>
 							</div>
 							<div class="signSection">
@@ -202,6 +206,8 @@ import MessageWindow from '../support/MessageWindow.vue'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Calendar from 'primevue/calendar';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 
 export default{
@@ -211,13 +217,15 @@ export default{
 		Accordion,
 		AccordionTab,
 		Calendar,
+		DataTable,
+		Column,
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		
 		const documentInfo = reactive({
 			documentNumber: 0,
-			tvaValue: 19
+			tvaValue: 19,
 		})
 
 		return{
@@ -246,19 +254,34 @@ export default{
 
 			documentDate: new Date(),
 			dateOnInvoice: null,
+			productsList: [],
+
+			invoiceSubtotal: 0,
+			invoiceTvaTotal: 0,
+			invoiceTotal: 0,
 		}
 	},
 	watch: {
 		documentDate: function(value){
 			this.dateOnInvoice = value.toLocaleDateString("en-US");
-		}
+		},
+		productsList: {
+			handler(val) {
+				val.forEach(item => {
+					item.qPrice = Number(item.uPrice) * Number(item.quantity);
+				});
+
+				this.updatePricesAndTotals();
+			},
+			deep: true
+		},
 	},
 	mounted(){
 		this.dateOnInvoice = this.documentDate.toLocaleDateString("en-US");
 	},
 	methods:{
     downloadProcess(){
-      // let itemListLength = this.FactOptions.length;
+      let itemListLength = this.productsList.length;
       let height;
       let docName = "INVOICE_" + "SERIALNR" + "_" + "DATE" + "_" + "CLIENTNAME" + ".pdf";
 
@@ -267,8 +290,9 @@ export default{
 				let img = dataUrl;
 				let doc = new jsPDF();
 				height = 200;
-				// height = height + (itemListLength * 5);
-				// (height > 290) ? height = 290 : height;
+				height = height + (itemListLength * 40);
+
+				(height > 300) ? height = 300 : height;
 
 				doc.addImage(img, 'JPEG', 5, 5, 200, height);
 				doc.save(docName);
@@ -283,6 +307,34 @@ export default{
 					this.dropdownVisibility[i] = 0;
 				}
 			}
+		},
+		addNewProduct(){
+			let newProduct = {
+				id: this.productsList.length + 1,
+				name: "New Product",
+				uPrice: 1,
+				quantity: 1,
+				qPrice: 1,
+			}
+			this.productsList.push(newProduct);
+
+			console.log(this.productsList);
+		},
+		updatePricesAndTotals(){
+			this.invoiceSubtotal = 0;
+			this.invoiceTvaTotal = 0;
+			this.invoiceTotal = 0;
+
+			this.productsList.forEach((item) => {
+				this.invoiceSubtotal += Number(item.qPrice);
+			})
+
+			this.invoiceTvaTotal = ((Number(this.invoiceSubtotal) * Number(this.tvaValue)) / 100);
+			this.invoiceTotal = (Number(this.invoiceSubtotal) + Number(this.invoiceTvaTotal)).toFixed(2);
+			
+
+			this.invoiceTvaTotal = this.invoiceTvaTotal.toFixed(2);
+			this.invoiceSubtotal = this.invoiceSubtotal.toFixed(2);
 		}
 	}
 }
