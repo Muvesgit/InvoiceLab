@@ -8,8 +8,9 @@
 
 
 :root {
-  --teal: #37d49d;
+  --primaryColor: #37d49d;
   --prefGrey: #b2b2b2;
+	--bgImage: url("./img/tealbg.png");
 }
 
 *{
@@ -48,20 +49,74 @@ body{
 }
 
 .navigation a:hover{
-  color: var(--teal);
+  color: var(--primaryColor);
   text-decoration: underline;
 }
 
 .navigation .selectedNavElement{
-  color: var(--teal);
+  color: var(--primaryColor);
 }
+
+.colorSection{
+	display: flex;
+	cursor: pointer;
+}
+
+.colorShowcase{
+	width: 1vw;
+	height: 1vw;
+	background-color: var(--primaryColor);
+	border-radius: 3px;
+	border: 1px solid var(--prefGrey);
+}
+
+.colorShowcase:hover{
+	border: 1px solid black;
+}
+
+.tealChoice{
+	background-color: #37d49d;
+	margin-top: .2vw;
+	margin-left: .2vw;
+}
+.coralChoice{
+	background-color: #fb896a;
+	margin-top: .2vw;
+	margin-left: .2vw;
+}
+.blueChoice{
+	background-color: #1341ca;
+	margin-left: .2vw;
+	margin-top: .2vw;
+}
+.yellowChoice{
+	margin-left: .2vw;
+	margin-top: .2vw;
+	background-color: #f58a1e;
+}
+.greyChoice{
+	margin-left: .2vw;
+	margin-top: .2vw;
+	background-color: #555555;
+}
+
+.colorChoiceMenu{
+	position: absolute;
+	background-color: white;
+	width: 2vw;
+	height: 6.5vw;
+	border: 1px solid var(--prefGrey);
+	border-radius: 3px;
+	top: 3vw
+}
+
 
 /* footer */
 
 .classyFooter{
   height: 2vw;
   width: 100%;
-  background-color: var(--teal);
+  background-color: var(--primaryColor);
   margin: 0;
   display: flex;
   justify-content: center;
@@ -77,9 +132,9 @@ body{
 
 .messageBoard{
   background-color: white;
-  /* border-bottom: 5px solid var(--teal); */
-  /* border-left: 3px solid var(--teal); */
-  box-shadow: -10px 10px 25px var(--teal);
+  /* border-bottom: 5px solid var(--primaryColor); */
+  /* border-left: 3px solid var(--primaryColor); */
+  box-shadow: -10px 10px 25px var(--primaryColor);
   position: fixed;
   z-index: 100;
   top: 7vw;
@@ -121,7 +176,7 @@ body{
 }
 
 .messageBoardTimer{
-  background-color: var(--teal);
+  background-color: var(--primaryColor);
   position: fixed;
   z-index: 100;
   top: 12.8vw;
@@ -177,7 +232,7 @@ body{
   width: 100%;
   text-align: justify;
   min-height: 50vw;
-  background-image: url("./img/tealbg.jpg");
+  background-image: var(--bgImage);
 }
 
 .centeredTextWall h1{
@@ -389,7 +444,7 @@ body{
 }
 
 .arrowWrapper i:hover{
-  color: var(--teal);
+  color: var(--primaryColor);
 }
 
 /* invoice creator */
@@ -532,7 +587,7 @@ body{
 }
 
 .centeredButtonSection span{
-  color: var(--teal);
+  color: var(--primaryColor);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -542,7 +597,7 @@ body{
 }
 
 .primaryButton, .smallPrimaryButton{
-  background-color: var(--teal);
+  background-color: var(--primaryColor);
   width: 10vw;
   height: 5vw;
   border-radius: 30px;
@@ -644,7 +699,7 @@ body{
 }
 
 .dropdownHeader:active {
-  border: 1px solid var(--teal);
+  border: 1px solid var(--primaryColor);
 }
 
 .dropdownHeader h2{ 
@@ -699,8 +754,8 @@ body{
 
 /* primevue template rewrites */
 .p-button{
-  background-color: var(--teal) !important;
-  border: 1px solid var(--teal) !important;
+  background-color: var(--primaryColor) !important;
+  border: 1px solid var(--primaryColor) !important;
   cursor: pointer;
 }
 
@@ -814,7 +869,7 @@ body{
 }
 
 .totalRow{
-  background-color: var(--teal);
+  background-color: var(--primaryColor);
   -webkit-print-color-adjust: exact;
 }
 
@@ -836,7 +891,7 @@ body{
 .companyInfo h1{
   font-size: .8vw;
   font-weight: 600;
-  border-bottom: 1px solid var(--teal);
+  border-bottom: 1px solid var(--primaryColor);
 }
 
 /* #invoice2 .companyInfo h1{
@@ -871,15 +926,15 @@ body{
 .dataTableDiv{
   margin-top: 1vw;
   margin-bottom: 1vw;
-  border-top: 1px solid var(--teal);
-  border-bottom: 1px solid var(--teal);
+  border-top: 1px solid var(--primaryColor);
+  border-bottom: 1px solid var(--primaryColor);
 }
 
 .totalRows{
   width: 50%;
   display: flex;
   justify-content: space-between;
-  border-right: 1px solid var(--teal);
+  border-right: 1px solid var(--primaryColor);
   padding-right: .5vw;
   padding-top: 1vw;
   padding-bottom: 1vw;
@@ -917,7 +972,7 @@ body{
 .tot
 
 .chitBox{
-  border: 1px solid var(--teal);
+  border: 1px solid var(--primaryColor);
   margin-top: 1vw;
 }
 
