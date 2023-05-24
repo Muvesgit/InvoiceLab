@@ -13,8 +13,8 @@
 							<div class="column">
 								<h1>Document Type</h1>
 
-								<div class="dropdownWrap">
-									<div class="dropdownHeader" @click="() => {(dropdownVisibility[0]) ? dropdownVisibility[0]++ : dropdownVisibility[0]--}">
+								<div class="dropdownWrap" @click="() => {(dropdownVisibility[0]) ? dropdownVisibility[0]++ : dropdownVisibility[0]--}">
+									<div class="dropdownHeader">
 										<h1 v-if="selectedType"> {{ selectedType.name }} </h1>
 										<h2 v-else>Choose Invoice Type </h2>
 										<i v-if="!dropdownVisibility[0]" class="pi pi-angle-down"></i>
@@ -43,18 +43,140 @@
 								<Calendar v-model="documentDate" showIcon />
 							</div>
 							<div class="column">
-								<h1>TVA (%)</h1>
+								<h1>VAT (%)</h1>
 								
 								<input type="text" class="invoiceInput" v-model="tvaValue">
 							</div>
 						</div>
+            <div class="row">
+              <div class="column">
+                <h1>Document Currency</h1>
+
+                <div class="dropdownWrap" @click="() => {(dropdownVisibility[1]) ? dropdownVisibility[1]++ : dropdownVisibility[1]--}">
+                  <div class="dropdownHeader">
+                    <h1 v-if="invoiceCurrency"> {{ invoiceCurrency }} </h1>
+                    <h2 v-else>Choose Document Currency</h2>
+                    <i v-if="!dropdownVisibility[1]" class="pi pi-angle-down"></i>
+                    <i v-else class="pi pi-angle-up"></i>
+                  </div>
+
+                  <div v-if="dropdownVisibility[1]" class="dropdownBody">
+                    <div class="option" v-for="(item, index) in currencyTypes" v-bind:key="item.id" @click="() => {invoiceCurrency = currencyTypes[index].name; dropdownVisibility[1] = 0}">
+                      <h1>{{ item.name }}</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 					</div>
 				</AccordionTab>
 				<AccordionTab header="Company Information and Logo">
-					<h1>Info and Logo</h1>
+          <div class="accordionSection">
+						<div class="column">
+							<div class="row">
+								<h1>Company Name</h1>
+								<input type="text" class="invoiceInput" v-model="company.name">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.orgReg.isActive" :binary="true" />
+
+								<h1>{{ company.orgReg.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="company.orgReg.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.cif.isActive" :binary="true" />
+
+								<h1>{{ company.cif.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="company.cif.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.address.isActive" :binary="true" />
+
+								<h1>{{ company.address.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="company.address.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.bank.isActive" :binary="true" />
+
+								<h1>{{ company.bank.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="company.bank.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.account.isActive" :binary="true" />
+
+								<h1>{{ company.account.name }}</h1>
+                <div class="dropdownWrap" @click="() => {(dropdownVisibility[2]) ? dropdownVisibility[2]++ : dropdownVisibility[2]--}">
+									<div class="dropdownHeader">
+										<h1 v-if="company.account.currency"> {{ company.account.currency }} </h1>
+										<h2 v-else>Account Currency</h2>
+										<i v-if="!dropdownVisibility[2]" class="pi pi-angle-down"></i>
+										<i v-else class="pi pi-angle-up"></i>
+									</div>
+
+									<div v-if="dropdownVisibility[2]" class="dropdownBody">
+										<div class="option" v-for="(item, index) in currencyTypes" v-bind:key="item.id" @click="() => {company.account.currency = currencyTypes[index].name; dropdownVisibility[2] = 0}">
+											<h1>{{ item.name }}</h1>
+										</div>
+									</div>
+								</div>
+								<input type="text" class="invoiceInput" v-model="company.account.value">
+              </div>
+						</div>
+					</div>
 				</AccordionTab>
 				<AccordionTab header="Client Information">
-					<h1>Client Info</h1>
+          <div class="accordionSection">
+						<div class="column">
+							<div class="row">
+								<h1>Client Name</h1>
+								<input type="text" class="invoiceInput" v-model="client.name">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.orgReg.isActive" :binary="true" />
+
+								<h1>{{ client.orgReg.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="client.orgReg.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.cif.isActive" :binary="true" />
+
+								<h1>{{ client.cif.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="client.cif.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.address.isActive" :binary="true" />
+
+								<h1>{{ client.address.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="client.address.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.bank.isActive" :binary="true" />
+
+								<h1>{{ client.bank.name }}</h1>
+								<input type="text" class="invoiceInput" v-model="client.bank.value">
+              </div>
+							<div class="row">
+                <Checkbox v-model="company.account.isActive" :binary="true" />
+
+								<h1>{{ client.account.name }}</h1>
+                <div class="dropdownWrap" @click="() => {(dropdownVisibility[3]) ? dropdownVisibility[3]++ : dropdownVisibility[3]--}">
+									<div class="dropdownHeader">
+										<h1 v-if="client.account.currency"> {{ client.account.currency }} </h1>
+										<h2 v-else>Account Currency</h2>
+										<i v-if="!dropdownVisibility[3]" class="pi pi-angle-down"></i>
+										<i v-else class="pi pi-angle-up"></i>
+									</div>
+
+									<div v-if="dropdownVisibility[3]" class="dropdownBody">
+										<div class="option" v-for="(item, index) in currencyTypes" v-bind:key="item.id" @click="() => {client.account.currency = currencyTypes[index].name; dropdownVisibility[3] = 0}">
+											<h1>{{ item.name }}</h1>
+										</div>
+									</div>
+								</div>
+								<input type="text" class="invoiceInput" v-model="client.account.value">
+              </div>
+						</div>
+					</div>
 				</AccordionTab>
 				<AccordionTab header="Products">
 					<div class="productsTable">
@@ -72,7 +194,7 @@
 							<h1>Quantity</h1>
 							<h1>Quantity Price</h1>
 						</div>
-						<div class="productsTableBody">
+						<div v-if="productsList.length > 0" class="productsTableBody">
 							<div v-for="product in productsList" v-bind:key="product.id" class="productsTableRow">
 								<h1>{{ product.id }}</h1>
 								<input v-model="product.name" />
@@ -81,10 +203,16 @@
 								<h1>{{ product.qPrice }}</h1>
 							</div>
 						</div>
+            <div v-else class="productsTableBody">
+              <div class="productsTableRow">
+                <h1>No products added.</h1>
+              </div>
+            </div>
 					</div>
 				</AccordionTab>
 				<AccordionTab header="Add Message">
 					<h1>Message</h1>
+          <Textarea v-model="invoiceAddedNote" rows="3" cols="100" />
 				</AccordionTab>
 			</Accordion>
 
@@ -114,33 +242,35 @@
 
 							<div>
 								<h2>DATE: {{ dateOnInvoice }}</h2>
-								<h2>TVA: {{ tvaValue }}%</h2>
+								<h2>VAT: {{ tvaValue }}%</h2>
 							</div>
 
 							<div class="totalRow">
 								<h1>TOTAL: </h1>
-								<h1>AMOUNT {CURRENCY}</h1>
+								<h1> {{ invoiceTotal + " " + invoiceCurrency }}</h1>
 							</div>
 						</div>
 					</div>
 
 					<div class="invDivider">
 						<div class="companyInfo">
-							<h1>COMPANY</h1>
-							<h2>COMPANY NAME</h2>
-							<h3><span>CIF:</span>  RO15730704</h3>
-							<h3><span>COM. REG:</span>  J26/1148/2003</h3>
-							<h3><span>ADDRESS:</span>  Mun. Târgu Mureș, Str. 8 Martie, Nr.59, Jud. Mureș</h3>
-							<h3><span>IBAN(RON):</span>  RO123OTP123123123123</h3>
-							<h3><span>BANK:</span>  OTP </h3>
+							<h1>BENEFICIARY</h1>
+							<h2>{{ company.name }}</h2>
+							<h3 v-if="company.orgReg.isActive"><span> {{ company.orgReg.name }}: </span> {{ company.orgReg.value }} </h3>
+							<h3 v-if="company.cif.isActive"><span> {{ company.cif.name }}: </span> {{ company.cif.value }} </h3>
+							<h3 v-if="company.address.isActive"><span> {{ company.address.name }}: </span> {{ company.address.value }} </h3>
+							<h3 v-if="company.bank.isActive"><span> {{ company.bank.name }}: </span> {{ company.bank.value }} </h3>
+							<h3 v-if="company.account.isActive"><span> {{ company.account.name + "(" + company.account.currency + ")" }}: </span> {{ company.account.value }} </h3>
 						</div>
 
 						<div class="companyInfo">
 							<h1>CLIENT</h1>
-							<h2>CLIENT NAME</h2>
-							<h3><span>INFO 1:</span>  TEST</h3>
-							<h3><span>INFO 2:</span>  TEST</h3>
-							<h3><span>INFO 3:</span>  TEST</h3>
+							<h2>{{ client.name }}</h2>
+							<h3 v-if="company.orgReg.isActive"><span> {{ client.orgReg.name }}: </span> {{ client.orgReg.value }} </h3>
+							<h3 v-if="company.cif.isActive"><span> {{ client.cif.name }}: </span> {{ client.cif.value }} </h3>
+							<h3 v-if="company.address.isActive"><span> {{ client.address.name }}: </span> {{ client.address.value }} </h3>
+							<h3 v-if="company.bank.isActive"><span> {{ client.bank.name }}: </span> {{ client.bank.value }} </h3>
+							<h3 v-if="company.account.isActive"><span> {{ client.account.name + "(" + client.account.currency + ")" }}: </span> {{ client.account.value }} </h3>
 						</div>
 					</div>
 					
@@ -157,13 +287,13 @@
 							<div class="totalRows">
 								<div>
 									<h2>SUBTOTAL:</h2>
-									<h2>TVA:</h2>
+									<h2>VAT:</h2>
 									<h1>TOTAL:</h1>
 								</div>
 								<div>
-									<h2>{{ invoiceSubtotal }} {CURR}</h2>
-									<h2>{{ invoiceTvaTotal }} {CURR}</h2>
-									<h1>{{ invoiceTotal }} {CURR}</h1>
+									<h2>{{ invoiceSubtotal + " " + invoiceCurrency}}</h2>
+									<h2>{{ invoiceTvaTotal + " " + invoiceCurrency}}</h2>
+									<h1>{{ invoiceTotal + " " + invoiceCurrency}}</h1>
 								</div>
 							</div>
 							<div class="signSection">
@@ -175,14 +305,14 @@
 
 						<div class="invFooterBox">
 							<div class="smallDetails">
-								<h1>COMPANY NAME</h1>
+								<h1> {{ company.name }} </h1>
 								<h2>Capital: 200 RON</h2>
 								<h2>Telefon: 0365 424 422 ; Fax: 0365 424 423</h2>
 								<h2>Email: test@test.com</h2>
 								<h2>IBAN(EUR): RO123OTP123123123123 ; Bank: OTP</h2>
 							</div>
 							<div class="mentionBox">
-								<h3 style="white-space: pre-line;">Mention: Message</h3>
+								<h3 style="white-space: pre-line;">Mention: {{ invoiceAddedNote }}</h3>
 							</div>
 						</div>
 
@@ -208,6 +338,8 @@ import AccordionTab from 'primevue/accordiontab';
 import Calendar from 'primevue/calendar';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Checkbox from 'primevue/checkbox';
+import Textarea from 'primevue/textarea';
 
 
 export default{
@@ -219,6 +351,8 @@ export default{
 		Calendar,
 		DataTable,
 		Column,
+    Checkbox,
+    Textarea
 	},
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -226,6 +360,74 @@ export default{
 		const documentInfo = reactive({
 			documentNumber: 0,
 			tvaValue: 19,
+      selectedType: null,
+
+      documentDate: new Date(),
+      dateOnInvoice: null,
+      productsList: [],
+
+      invoiceSubtotal: 0,
+      invoiceTvaTotal: 0,
+      invoiceTotal: 0,
+
+      invoiceCurrency: 'RON',
+
+      invoiceAddedNote: '',
+      
+      company: {
+        name: 'NAME',
+        orgReg: {
+          name: 'Company Registration Number',
+          isActive: true,
+          value: '',
+        },
+        cif: {
+          name: 'Customer Identification File',
+          isActive: true,
+          value: '',
+        },
+        address: {
+          name: 'Address',
+          isActive: true,
+          value: '',
+        },
+        bank: {
+          name: 'Bank',
+          isActive: true,
+          value: '',
+        },
+        account: {
+          name: 'Account - IBAN',
+          currency: 'RON',
+          isActive: true,
+          value: '',
+        },
+      },
+      client: {
+        name: 'NAME',
+        orgReg: {
+          name: 'Company Registration Number',
+          value: '',
+        },
+        cif: {
+          name: 'Customer Identification File',
+          value: '',
+        },
+        address: {
+          name: 'Address',
+          value: '',
+        },
+        bank: {
+          name: 'Bank',
+          value: '',
+        },
+        account: {
+          name: 'Account - IBAN',
+          currency: 'RON',
+          value: '',
+        },
+      },
+
 		})
 
 		return{
@@ -239,7 +441,7 @@ export default{
 
 			bottomSectionController: 0,
 
-			dropdownVisibility: [0],
+			dropdownVisibility: [0, 0, 0, 0],
 			invoiceTypes: [
 				{
 					id: 0,
@@ -250,15 +452,17 @@ export default{
 					name: "PROFORMA INVOICE"
 				},
 			],
-			selectedType: null,
+			currencyTypes: [
+				{
+					id: 0,
+					name: "RON"
+				},
+				{
+					id: 1,
+					name: "EUR"
+				},
+			],
 
-			documentDate: new Date(),
-			dateOnInvoice: null,
-			productsList: [],
-
-			invoiceSubtotal: 0,
-			invoiceTvaTotal: 0,
-			invoiceTotal: 0,
 		}
 	},
 	watch: {

@@ -493,6 +493,12 @@ body{
   display: flex;
   justify-content: space-between;
   margin-top: 1vw;
+  align-items: center;
+}
+
+.accordionSection .row h1{
+  width: 100%;
+  margin: 0 0 0 .5vw;
 }
 
 .accordionSection .column{
@@ -569,7 +575,9 @@ body{
   width: 7vw;
 }
 
-
+.p-hidden-accessible{
+  display: none;
+}
 
 
 
@@ -1043,7 +1051,7 @@ body{
 } */
 
 .invFooterBox h3{
-  font-size: .35vw;
+  font-size: .4vw;
   font-weight: 400;
 }
 /* 
