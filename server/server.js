@@ -23,11 +23,13 @@ app.use(bodyParser.json());
   
 // models
 const User = require("./Models/User")
-
+const Invoice = require("./Models/Invoice")
 
 // routers
 const usersRouter = require('./Routes/Users')
+const invoicesRouter = require('./Routes/Invoices')
 app.use('/Users', usersRouter)
+app.use('/Invoices', invoicesRouter)
 
 // launch
 app.listen(8000, () => console.log('Express launched!'))

@@ -1,6 +1,52 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 
+const companySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    default: "Company Name"
+  },
+  orgReg: {
+    type: String,
+    required: true,
+    default: "Company Registration Number"
+  },
+  cif: {
+    type: String,
+    required: true,
+    default: "Customer Identification File"
+  },
+  address: {
+    type: String,
+    required: true,
+    default: "Address"
+  },
+  bank: {
+    type: String,
+    required: true,
+    default: "Bank"
+  },
+  account: {
+    type: String,
+    required: true,
+    default: "Account - IBAN"
+  },
+});
+
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    default: "Product Name"
+  },
+  price: {
+    type: String,
+    required: true,
+    default: "Product Price"
+  }
+});
+
 // model schema  used for the database
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -33,10 +79,21 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: () => Date.now(),
   },
-  company: {},
-  products: [],
-
+  company: {
+    type: companySchema,
+    default: {
+      name: "Company Name",
+      orgReg: "Company Registration Number",
+      cif: "Customer Identification File",
+      address: "Address",
+      bank: "Bank",
+      account: "Account - IBAN",
+    }
+  },
+  products: [productSchema],
+  clients: [companySchema],
 })
+
 
 userSchema.statics.findByName = async function (name){
   let lName = await this.find({lastName: new RegExp(name, 'i')});

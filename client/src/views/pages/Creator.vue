@@ -127,6 +127,27 @@
 				<AccordionTab header="Client Information">
           <div class="accordionSection">
 						<div class="column">
+							<div v-if="loggedUser" class="row">
+								<h1>Choose a Client</h1>
+								<div class="dropdownWrap" @click="() => {(dropdownVisibility[4]) ? dropdownVisibility[4]++ : dropdownVisibility[4]--}">
+									<div class="dropdownHeader">
+										<h1 v-if="client.name != 'NAME'"> {{ client.name }} </h1>
+										<h2 v-else>Choose Client</h2>
+										<i v-if="!dropdownVisibility[4]" class="pi pi-angle-down"></i>
+										<i v-else class="pi pi-angle-up"></i>
+									</div>
+
+									<div v-if="dropdownVisibility[4]" class="searchSection" @click="() => {dropdownVisibility[4] = 1}">
+										<input v-model="clientSearch" type="text" placeholder="Filter Clients" @keyup="filterClients()">
+									</div>
+
+									<div v-if="dropdownVisibility[4]" class="dropdownBody searchAbove">
+										<div class="option" v-for="(item, index) in loggedUser.clients" v-bind:key="item.id" @click="() => {replaceClient(index); dropdownVisibility[4] = 0}">
+											<h1>{{ item.name }}</h1>
+										</div>
+									</div>
+								</div>
+              </div>
 							<div class="row">
 								<h1>Client Name</h1>
 								<input type="text" class="invoiceInput" v-model="client.name">
@@ -180,27 +201,49 @@
 				</AccordionTab>
 				<AccordionTab header="Products">
 					<div class="productsTable">
+						<div v-if="loggedUser" class="productsTableControls">
+							<h1>Add a Product</h1>
+							<div class="dropdownWrap" @click="() => {(dropdownVisibility[5]) ? dropdownVisibility[5]++ : dropdownVisibility[5]--}">
+								<div class="dropdownHeader">
+									<h2>Add Product</h2>
+									<i v-if="!dropdownVisibility[5]" class="pi pi-angle-down"></i>
+									<i v-else class="pi pi-angle-up"></i>
+								</div>
+
+								<div v-if="dropdownVisibility[5]" class="searchSection" @click="() => {dropdownVisibility[5] = 1}">
+									<input v-model="productSearch" type="text" placeholder="Filter Products">
+								</div>
+
+								<div v-if="dropdownVisibility[5]" class="dropdownBody searchAbove">
+									<div class="option" v-for="(item) in loggedUser.products" v-bind:key="item.id" @click="() => {addNewProduct(item); dropdownVisibility[5] = 0}">
+										<h1>{{ item.name }}</h1>
+										<h1> <i class="pi pi-plus"></i> </h1>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="productsTableControls">
 							<h1>Products</h1>
 
-							<div class="smallPrimaryButton" @click="addNewProduct()">
+							<div class="smallPrimaryButton" @click="addNewProduct(null)">
 								<h1>Add Product</h1>
 							</div>
 						</div>
 						<div class="productsTableHeader">
-							<h1>Number</h1>
+							<h1>Nr</h1>
 							<h1>Name</h1>
 							<h1>Unit Price</h1>
 							<h1>Quantity</h1>
 							<h1>Quantity Price</h1>
 						</div>
 						<div v-if="productsList.length > 0" class="productsTableBody">
-							<div v-for="product in productsList" v-bind:key="product.id" class="productsTableRow">
+							<div v-for="product, index in productsList" v-bind:key="product.id" class="productsTableRow">
 								<h1>{{ product.id }}</h1>
 								<input v-model="product.name" />
 								<input v-model="product.uPrice" />
 								<input v-model="product.quantity" />
 								<h1>{{ product.qPrice }}</h1>
+								<h1> <i class="pi pi-trash" @click="() => {productsList.splice(index, 1); this.productsReindex();}"></i> </h1>
 							</div>
 						</div>
             <div v-else class="productsTableBody">
@@ -212,7 +255,7 @@
 				</AccordionTab>
 				<AccordionTab header="Add Message">
 					<h1>Message</h1>
-          <Textarea v-model="invoiceAddedNote" rows="3" cols="100" />
+          <Textarea v-model="invoiceAddedNote" rows="3" cols="50" />
 				</AccordionTab>
 			</Accordion>
 
@@ -220,7 +263,7 @@
 				<div class="smallSecondaryButton" @click="reloadPage()">
 					<h1>Reset</h1>
 				</div>
-				<div class="smallPrimaryButton" @click="downloadProcess">
+				<div class="smallPrimaryButton" @click="saveProcess()">
 					<h1>Save</h1>
 				</div>
 			</div>
@@ -230,8 +273,8 @@
 			<div class="invoiceCard">
 				<div id="invoice">
 					<div class="invDivider">
-						<div class="invImg">
-							<img src="../../assets/img/defaultCompany.png"/>
+						<div class="defaultAvatar">
+							<i class="pi pi-file"></i>
 						</div>
 						
 						<div class="invDocInfo">
@@ -357,82 +400,123 @@ export default{
 	setup(){
 		const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		
-		const documentInfo = reactive({
-			documentNumber: 0,
+		var documentInfo = reactive({
 			tvaValue: 19,
-      selectedType: null,
+			selectedType: null,
 
-      documentDate: new Date(),
-      dateOnInvoice: null,
-      productsList: [],
+			documentDate: new Date(),
+			dateOnInvoice: null,
+			productsList: [],
 
-      invoiceSubtotal: 0,
-      invoiceTvaTotal: 0,
-      invoiceTotal: 0,
+			invoiceSubtotal: 0,
+			invoiceTvaTotal: 0,
+			invoiceTotal: 0,
 
-      invoiceCurrency: 'RON',
+			invoiceCurrency: 'RON',
 
-      invoiceAddedNote: '',
-      
-      company: {
-        name: 'NAME',
-        orgReg: {
-          name: 'Company Registration Number',
-          isActive: true,
-          value: '',
-        },
-        cif: {
-          name: 'Customer Identification File',
-          isActive: true,
-          value: '',
-        },
-        address: {
-          name: 'Address',
-          isActive: true,
-          value: '',
-        },
-        bank: {
-          name: 'Bank',
-          isActive: true,
-          value: '',
-        },
-        account: {
-          name: 'Account - IBAN',
-          currency: 'RON',
-          isActive: true,
-          value: '',
-        },
-      },
-      client: {
-        name: 'NAME',
-        orgReg: {
-          name: 'Company Registration Number',
-          value: '',
-        },
-        cif: {
-          name: 'Customer Identification File',
-          value: '',
-        },
-        address: {
-          name: 'Address',
-          value: '',
-        },
-        bank: {
-          name: 'Bank',
-          value: '',
-        },
-        account: {
-          name: 'Account - IBAN',
-          currency: 'RON',
-          value: '',
-        },
-      },
+			invoiceAddedNote: '',
+		});
 
-		})
+		var instanceInfo = reactive({
+			client: {
+					name: 'NAME',
+					orgReg: {
+						name: 'Company Registration Number',
+						value: '',
+					},
+					cif: {
+						name: 'Customer Identification File',
+						value: '',
+					},
+					address: {
+						name: 'Address',
+						value: '',
+					},
+					bank: {
+						name: 'Bank',
+						value: '',
+					},
+					account: {
+						name: 'Account - IBAN',
+						currency: 'RON',
+						value: '',
+					},
+				},
+		});
+
+		if(loggedUser){
+			documentInfo.documentNumber = 0;
+			documentInfo.savedClients = loggedUser.clients;
+			documentInfo.savedProducts = loggedUser.products;
+			
+			instanceInfo.company = {
+				name: loggedUser.company.name,
+				orgReg: {
+					name: 'Company Registration Number',
+					isActive: true,
+					value: loggedUser.company.orgReg,
+				},
+				cif: {
+					name: 'Customer Identification File',
+					isActive: true,
+					value: loggedUser.company.cif,
+				},
+				address: {
+					name: 'Address',
+					isActive: true,
+					value: loggedUser.company.address,
+				},
+				bank: {
+					name: 'Bank',
+					isActive: true,
+					value: loggedUser.company.bank,
+				},
+				account: {
+					name: 'Account - IBAN',
+					currency: 'RON',
+					isActive: true,
+					value: loggedUser.company.account,
+				},
+			}
+		}
+		else{
+			documentInfo.documentNumber = 0;
+			
+			instanceInfo.company = {
+				name: 'NAME',
+				orgReg: {
+					name: 'Company Registration Number',
+					isActive: true,
+					value: '',
+				},
+				cif: {
+					name: 'Customer Identification File',
+					isActive: true,
+					value: '',
+				},
+				address: {
+					name: 'Address',
+					isActive: true,
+					value: '',
+				},
+				bank: {
+					name: 'Bank',
+					isActive: true,
+					value: '',
+				},
+				account: {
+					name: 'Account - IBAN',
+					currency: 'RON',
+					isActive: true,
+					value: '',
+				},
+			}
+		}
 
 		return{
 			loggedUser,
-			...toRefs(documentInfo)
+			...toRefs(documentInfo),
+			...toRefs(instanceInfo),
 		}
 	},
 	data(){
@@ -441,7 +525,7 @@ export default{
 
 			bottomSectionController: 0,
 
-			dropdownVisibility: [0, 0, 0, 0],
+			dropdownVisibility: [0, 0, 0, 0, 0, 0],
 			invoiceTypes: [
 				{
 					id: 0,
@@ -462,7 +546,9 @@ export default{
 					name: "EUR"
 				},
 			],
-
+			
+			clientSearch: null,
+			productSearch: null,
 		}
 	},
 	watch: {
@@ -479,11 +565,112 @@ export default{
 			},
 			deep: true
 		},
+		clientSearch: function(){
+			this.filterClients();
+		},
+		productSearch: function(){
+			this.filterProducts();
+		},
 	},
 	mounted(){
 		this.dateOnInvoice = this.documentDate.toLocaleDateString("en-US");
 	},
 	methods:{
+		openMessageBoard(content){
+      this.messageBoardContent = content;
+
+      setTimeout(() => {
+        this.messageBoardContent = null;
+      }, 6200);
+    },
+		async saveProcess(){
+			if ( !this.selectedType ){
+				this.openMessageBoard("Please select a valid Document Type!");
+				return;
+			}
+			if ( !this.documentNumber ){
+				this.openMessageBoard("Please enter a valid Document Number!");
+				return;
+			}
+			if ( !this.documentDate ){
+				this.openMessageBoard("Please enter a valid Document Date!");
+				return;
+			}
+			if ( !this.tvaValue ){
+				this.openMessageBoard("Please enter a valid VAT value!");
+				return;
+			}
+			if ( !this.invoiceCurrency ){
+				this.openMessageBoard("Please enter a valid Document Currency!");
+				return;
+			}
+			if ( this.company.name == 'NAME' ){
+				this.openMessageBoard("Please enter a valid Company Name!");
+				return;
+			}
+			if ( this.client.name == 'NAME' ){
+				this.openMessageBoard("Please enter a valid Client Name!");
+				return;
+			}
+			if ( this.productsList.length == 0 ){
+				this.openMessageBoard("Please enter at least one product!");
+				return;
+			}
+
+			let data;
+			if(this.loggedUser){
+				data = JSON.stringify({
+					userId: this.loggedUser._id,
+					type: this.selectedType,
+					docNr: this.documentNumber,
+					docDate: this.documentDate,
+					vat: this.tvaValue,
+					docCurrency: this.invoiceCurrency,
+					docMessage: this.invoiceAddedNote,
+					company: this.company,
+					client: this.client,
+					products: this.productsList
+				});
+			}
+			else{
+				data = JSON.stringify({
+					type: this.selectedType,
+					docNr: this.documentNumber,
+					docDate: this.documentDate,
+					vat: this.tvaValue,
+					docCurrency: this.invoiceCurrency,
+					docMessage: this.invoiceAddedNote,
+					company: this.company,
+					client: this.client,
+					products: this.productsList
+				});
+			}
+
+
+			// TO DO: DEBUG INVOICE POST
+			// TO DO: IMPLEMENT DOC NUMBER
+			console.log(data);
+			try{
+				await fetch(process.env.VUE_APP_INVOICES,
+				{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: data
+				})
+				.then((response) => response.json())
+				.then((res) => {
+					if(res.status == 201){
+						this.openMessageBoard("Document saved successfully!")
+						// this.downloadProcess();
+					}
+				})
+			}
+			catch(error){
+				this.openMessageBoard(error.message);
+			}
+		},
     downloadProcess(){
       let itemListLength = this.productsList.length;
       let height;
@@ -506,24 +693,46 @@ export default{
       location.reload();
     },
 		clickListener(event){
-			if(event.target.className != "dropdownHeader"){
+			if(event.target.className != "dropdownHeader"  && event.target.className != "searchSection" && event.target.parentNode.className != "searchSection"){
 				for(let i = 0; i < this.dropdownVisibility.length; ++i){
 					this.dropdownVisibility[i] = 0;
 				}
 			}
 		},
-		addNewProduct(){
-			let newProduct = {
+		addNewProduct(prod){
+			let newProduct;
+
+			switch(prod){
+				case null:
+					newProduct = {
+						id: this.productsList.length + 1,
+						name: "New Product",
+						uPrice: 1,
+						quantity: 1,
+						qPrice: 1,
+					}
+					this.productsList.push(newProduct);
+					this.productsReindex();
+				return;
+			}
+
+			newProduct = {
 				id: this.productsList.length + 1,
-				name: "New Product",
-				uPrice: 1,
+				name: prod.name,
+				uPrice: Number(prod.price),
 				quantity: 1,
-				qPrice: 1,
+				qPrice: Number(prod.price),
 			}
 			this.productsList.push(newProduct);
-
-			console.log(this.productsList);
+			this.productsReindex();
 		},
+
+		productsReindex(){
+			this.productsList.map((item, index) => {
+				item.id = index + 1;
+			});
+		},
+
 		updatePricesAndTotals(){
 			this.invoiceSubtotal = 0;
 			this.invoiceTvaTotal = 0;
@@ -539,7 +748,54 @@ export default{
 
 			this.invoiceTvaTotal = this.invoiceTvaTotal.toFixed(2);
 			this.invoiceSubtotal = this.invoiceSubtotal.toFixed(2);
-		}
+		},
+
+		replaceClient(index){
+			this.client = {
+				name: this.loggedUser.clients[index].name,
+				orgReg: {
+					name: 'Company Registration Number',
+					value: this.loggedUser.clients[index].orgReg,
+				},
+				cif: {
+					name: 'Customer Identification File',
+					value: this.loggedUser.clients[index].cif,
+				},
+				address: {
+					name: 'Address',
+					value: this.loggedUser.clients[index].address,
+				},
+				bank: {
+					name: 'Bank',
+					value: this.loggedUser.clients[index].bank,
+				},
+				account: {
+					name: 'Account - IBAN',
+					currency: 'RON',
+					value: this.loggedUser.clients[index].account,
+				},
+			}
+		},
+		
+		filterClients(){
+			if(this.clientSearch){
+				this.loggedUser.clients = this.savedClients.filter((item) => {return (item.name.toUpperCase().includes(this.clientSearch.toUpperCase()))});
+				console.log(this.loggedUser.clients)
+			}
+			else{
+				this.loggedUser.clients = this.savedClients
+				console.log(this.loggedUser.clients)
+			}
+		},
+
+		filterProducts(){
+			if(this.productSearch){
+				this.loggedUser.products = this.savedProducts.filter((item) => {return (item.name.toUpperCase().includes(this.productSearch.toUpperCase()))});
+			}
+			else{
+				this.loggedUser.products = this.savedProducts
+			}
+		},
 	}
 }
 </script>

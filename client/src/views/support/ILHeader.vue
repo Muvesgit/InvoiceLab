@@ -41,19 +41,15 @@ export default{
       switch(chosenColor){
         case 1:
           stylesheet.style.setProperty('--primaryColor', '#fb896a');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/coralbg.png")');
           break;
         case 2:
           stylesheet.style.setProperty('--primaryColor', '#1341ca');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/bluebg.png")');
           break;
         case 3:
           stylesheet.style.setProperty('--primaryColor', '#f58a1e');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/yellowbg.png")');
           break;
         case 4:
           stylesheet.style.setProperty('--primaryColor', '#555555');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/greybg.png")');
           break;
       }
     }
@@ -80,31 +76,26 @@ export default{
         case 0:
           // teal
           stylesheet.style.setProperty('--primaryColor', '#37d49d');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/tealbg.png")');
           localStorage.setItem("chosenColor", 0);
           break;
         case 1:
           // coral
           stylesheet.style.setProperty('--primaryColor', '#fb896a');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/coralbg.png")');
           localStorage.setItem("chosenColor", 1);
           break;
         case 2:
           // blue
           stylesheet.style.setProperty('--primaryColor', '#1341ca');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/bluebg.png")');
           localStorage.setItem("chosenColor", 2);
           break;
         case 3:
           // yellow
           stylesheet.style.setProperty('--primaryColor', '#f58a1e');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/yellowbg.png")');
           localStorage.setItem("chosenColor", 3);
           break;
         case 4:
           // grey
           stylesheet.style.setProperty('--primaryColor', '#555555');
-          stylesheet.style.setProperty('--bgImage', 'url("./img/greybg.png")');
           localStorage.setItem("chosenColor", 4);
           break;
       }

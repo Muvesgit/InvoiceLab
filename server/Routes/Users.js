@@ -11,13 +11,10 @@ router.get('/', async (req, res) =>{
 	catch(error){
 		res.status(500).json({ message: err.message }) //500 - server error
 	}
-
-	// res.send("test text");
 })
 
 // get one
 router.get('/:id', getUserById, (req, res) =>{ //this route calls a middleware
-	console.log(req.params.id)
 	res.send(res.user)
 })
 
@@ -71,24 +68,185 @@ router.post('/login', async (req, res) =>{
 })
 
 // update
-router.patch('/:id', getUserById, async (req, res) =>{
-	if(req.body.firstName != null){
+router.patch('/personalUpdate/:id', getUserById, async (req, res) =>{
+	if(req.body.firstName != null && req.body.lastName != null && req.body.email != null){
 		res.user.firstName = req.body.firstName
+		res.user.lastName = req.body.lastName
+		res.user.email = req.body.email
 	}
 
 	try{
 		const updatedUser = await res.user.save()
-		res.json(updatedUser)
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
 	}
 	catch (error){
 		res.status(400).json({ message: error })
 	}
 })
 
-// delete
-router.delete('/:id', (req, res) =>{
-	
+router.patch('/companyUpdate/:id', getUserById, async (req, res) =>{
+	if(req.body.name != null && req.body.orgReg != null && req.body.cif != null && req.body.address != null && req.body.bank != null && req.body.account != null){
+		res.user.company.name = req.body.name
+		res.user.company.orgReg = req.body.orgReg
+		res.user.company.cif = req.body.cif
+		res.user.company.address = req.body.address
+		res.user.company.bank = req.body.bank
+		res.user.company.account = req.body.account
+	}
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
 })
+
+router.patch('/addClient/:id', getUserById, async (req, res) =>{
+	let newClient = {};
+
+	if(req.body.name != null && req.body.orgReg != null && req.body.cif != null && req.body.address != null && req.body.bank != null && req.body.account != null){
+		newClient.name = req.body.name;
+		newClient.orgReg = req.body.orgReg;
+		newClient.cif = req.body.cif;
+		newClient.address = req.body.address;
+		newClient.bank = req.body.bank;
+		newClient.account = req.body.account;
+	}
+
+	res.user.clients.push(newClient);
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
+router.patch('/addProduct/:id', getUserById, async (req, res) =>{
+	let newProduct = {};
+
+	if(req.body.name != null && req.body.price){
+		newProduct.name = req.body.name;
+		newProduct.price = req.body.price;
+	}
+
+	res.user.products.push(newProduct);
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
+router.patch('/:id/clientUpdate/:clientId', getUserById, async (req, res) =>{
+	let client = res.user.clients.filter((item) => {return item._id == req.params.clientId})[0];
+
+	if(req.body.name != null && req.body.orgReg != null && req.body.cif != null && req.body.address != null && req.body.bank != null && req.body.account != null){
+		client.name = req.body.name;
+		client.orgReg = req.body.orgReg;
+		client.cif = req.body.cif;
+		client.address = req.body.address;
+		client.bank = req.body.bank;
+		client.account = req.body.account;
+	}
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
+router.patch('/:id/productUpdate/:productId', getUserById, async (req, res) =>{
+	let product = res.user.products.filter((item) => {return item._id == req.params.productId})[0];
+
+	if(req.body.name && req.body.price){
+		product.name = req.body.name;
+		product.price = Number(req.body.price);
+	}
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
+
+// delete
+router.delete('/:id/deleteClient/:clientId', getUserById, async (req, res) =>{
+	let client = res.user.clients.filter((item) => {return item._id == req.params.clientId})[0];
+	
+	let index = res.user.clients.indexOf(client);
+	res.user.clients.splice(index, 1);
+	
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
+router.delete('/:id/deleteProduct/:productId', getUserById, async (req, res) =>{
+	let product = res.user.products.filter((item) => {return item._id == req.params.productId})[0];
+	
+	let index = res.user.products.indexOf(product);
+	res.user.products.splice(index, 1);
+
+	try{
+		const updatedUser = await res.user.save()
+		return res.status(201).json({
+			message : "Update successful!",
+			status : 201,
+			user: updatedUser
+		})
+	}
+	catch (error){
+		res.status(400).json({ message: error })
+	}
+})
+
 
 
 // this is middleware
