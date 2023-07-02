@@ -5,7 +5,6 @@
 		<div v-if="show" class="messageBoard">
 			<div>
 				<h2> New message: </h2>
-				<!-- <span @click="closeMessageBoard()"> X </span> -->
 			</div>
 
 			<h1> {{ message }} </h1>

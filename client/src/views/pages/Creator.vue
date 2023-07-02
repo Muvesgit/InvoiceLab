@@ -632,7 +632,6 @@ export default{
 
 			let data;
 			if(this.loggedUser){
-				console.log(this.selectedType)
 				data = JSON.stringify({
 					userId: this.loggedUser._id,
 					docType: this.selectedType.id,
@@ -795,11 +794,9 @@ export default{
 		filterClients(){
 			if(this.clientSearch){
 				this.loggedUser.clients = this.savedClients.filter((item) => {return (item.name.toUpperCase().includes(this.clientSearch.toUpperCase()))});
-				console.log(this.loggedUser.clients)
 			}
 			else{
 				this.loggedUser.clients = this.savedClients
-				console.log(this.loggedUser.clients)
 			}
 		},
 

@@ -112,13 +112,6 @@ userSchema.methods.validatePassword = function(password) {
   return this.password === hash;
 }; 
 
-// userSchema.query.byName = async function (name){
-//   let lName = await this.where({lastName: new RegExp(name, 'i')});
-//   let fName = await this.where({firstName: new RegExp(name, 'i')});
-
-//   return (lName.length == 0) ? fName : lName;
-// }
-
 userSchema.virtual('namedEmail').get(function() {
   return `${this.firstName} <${this.email}>`;
 })

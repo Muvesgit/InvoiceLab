@@ -53,14 +53,6 @@ router.post('/', async (req, res) =>{
 	}
 })
 
-// update
-
-// delete
-router.delete('/:id/deleteClient/:clientId', getInvoiceById, async (req, res) =>{
-
-})
-
-
 // this is middleware
 async function getInvoiceById(req, res, next){
 	let invoice;
