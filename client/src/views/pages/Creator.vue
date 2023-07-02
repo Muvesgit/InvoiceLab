@@ -549,6 +549,7 @@ export default{
 			
 			clientSearch: null,
 			productSearch: null,
+			saveableClient: null,
 		}
 	},
 	watch: {
@@ -616,40 +617,52 @@ export default{
 				this.openMessageBoard("Please enter at least one product!");
 				return;
 			}
+			
+			let saveableProducts = [];
+			this.productsList.map((item) => {
+				saveableProducts.push(
+					{
+						name: item.name,
+						uPrice: String(item.uPrice),
+						quantity: String(item.quantity),
+						qPrice: String(item.qPrice),
+					}
+				)
+			})
 
 			let data;
 			if(this.loggedUser){
+				console.log(this.selectedType)
 				data = JSON.stringify({
 					userId: this.loggedUser._id,
-					type: this.selectedType,
+					docType: this.selectedType.id,
 					docNr: this.documentNumber,
 					docDate: this.documentDate,
 					vat: this.tvaValue,
 					docCurrency: this.invoiceCurrency,
 					docMessage: this.invoiceAddedNote,
-					company: this.company,
-					client: this.client,
-					products: this.productsList
+					company: this.loggedUser.company,
+					client: this.saveableClient,
+					products: saveableProducts
 				});
 			}
 			else{
 				data = JSON.stringify({
-					type: this.selectedType,
+					docType: this.selectedType.id,
 					docNr: this.documentNumber,
 					docDate: this.documentDate,
 					vat: this.tvaValue,
 					docCurrency: this.invoiceCurrency,
 					docMessage: this.invoiceAddedNote,
-					company: this.company,
-					client: this.client,
-					products: this.productsList
+					company: this.loggedUser.company,
+					client: this.saveableClient,
+					products: saveableProducts
 				});
 			}
 
 
 			// TO DO: DEBUG INVOICE POST
 			// TO DO: IMPLEMENT DOC NUMBER
-			console.log(data);
 			try{
 				await fetch(process.env.VUE_APP_INVOICES,
 				{
@@ -710,7 +723,8 @@ export default{
 						uPrice: 1,
 						quantity: 1,
 						qPrice: 1,
-					}
+					};
+
 					this.productsList.push(newProduct);
 					this.productsReindex();
 				return;
@@ -751,6 +765,7 @@ export default{
 		},
 
 		replaceClient(index){
+			this.saveableClient = this.loggedUser.clients[index];
 			this.client = {
 				name: this.loggedUser.clients[index].name,
 				orgReg: {

@@ -13,6 +13,16 @@ router.get('/', async (req, res) =>{
 	}
 })
 
+router.get('/users/:id', async (req, res) =>{
+	try{
+		const invoices = await Invoice.find({ userId: req.params.id });
+		res.json(invoices);
+	}
+	catch(error){
+		res.status(500).json({ message: err.message }) //500 - server error
+	}
+})
+
 // get one
 router.get('/:id', getInvoiceById, (req, res) =>{ //this route calls a middleware
 	res.send(res.invoice)
@@ -20,10 +30,9 @@ router.get('/:id', getInvoiceById, (req, res) =>{ //this route calls a middlewar
 
 // post invoice
 router.post('/', async (req, res) =>{
-	// console.log these values!
-	const invoice = new Invoice({
+	let invoice = new Invoice({
 		userId: req.body.userId,
-		type: req.body.type,
+		docType: req.body.docType,
 		docNr: req.body.docNr,
 		docDate: req.body.docDate,
 		vat: req.body.vat,

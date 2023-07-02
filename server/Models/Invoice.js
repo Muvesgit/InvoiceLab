@@ -33,16 +33,26 @@ const companySchema = new mongoose.Schema({
   },
 });
 
-const productSchema = new mongoose.Schema({
+const invProductSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     default: "Product Name"
   },
-  price: {
+  uPrice: {
     type: String,
     required: true,
-    default: "Product Price"
+    default: "Product Unit Price"
+  },
+  quantity: {
+    type: String,
+    required: true,
+    default: "Product Quantity"
+  },
+  qPrice: {
+    type: String,
+    required: true,
+    default: "Product Quantity Price"
   }
 });
 
@@ -50,7 +60,7 @@ const invoiceSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
 	},
-	type: {
+	docType: {
     type: String,
     required: true
   },
@@ -83,7 +93,7 @@ const invoiceSchema = new mongoose.Schema({
 		type: companySchema,
     required: true
 	},
-	products: [productSchema],
+	products: [invProductSchema],
 })
 
 module.exports = mongoose.model("Invoice", invoiceSchema)

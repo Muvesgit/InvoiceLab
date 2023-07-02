@@ -98,12 +98,12 @@
 								<input v-model="filters['global'].value" placeholder="Keyword Search" />
 							</div>
 						</template>
-						<Column field="name" header="Name"></Column>
-						<Column field="orgReg" header="Company Registration Number"></Column>
-						<Column field="cif" header="Customer Identification File"></Column>
-						<Column field="address" header="Address"></Column>
-						<Column field="bank" header="Bank"></Column>
-						<Column field="account" header="Account"></Column>
+						<Column field="name" sortable  header="Name"></Column>
+						<Column field="orgReg" sortable header="Company Registration Number"></Column>
+						<Column field="cif" sortable header="Customer Identification File"></Column>
+						<Column field="address" sortable header="Address"></Column>
+						<Column field="bank" sortable header="Bank"></Column>
+						<Column field="account" sortable header="Account"></Column>
 						<Column header="Modify">
 							<template #body="slotprops">
 								<i class="pi pi-user-edit" @click="() => {editableEntity = slotprops.data; editOn = 5}"></i>
@@ -130,8 +130,8 @@
 								<input v-model="filters['global'].value" placeholder="Keyword Search" />
 							</div>
 						</template>
-						<Column field="name" header="Name"></Column>
-						<Column field="price" header="Price"></Column>
+						<Column field="name" sortable header="Name"></Column>
+						<Column field="price" sortable header="Price"></Column>
 						<Column header="Modify">
 							<template #body="slotprops">
 								<i class="pi pi-user-edit" @click="() => {editableEntity = slotprops.data; editOn = 6}"></i>
@@ -145,16 +145,55 @@
 				</div>
 
 				<div v-if="bottomSectionController == 2" class="contentSection">
-					<div>
-						<h1>Statistics</h1>
-						<h2>Coming soon</h2>
+					<div class="head">
+						<h1>Statistics based on sales</h1>
+					</div>
+					<Chart v-if="archiveData.length > 0" type="bar" :data="chartData" :options="chartOptions" />
+
+					<div class="head" v-else>
+						<h2>You have no archived invoices</h2>
 					</div>
 				</div>
 
 				<div v-if="bottomSectionController == 3" class="contentSection">
-					<div>
-						<h1>Archives</h1>
-						<h2>Coming soon</h2>
+					<div class="head">
+						<h1>Archived Invoices</h1>
+					</div>
+					<DataTable v-if="archiveData.length > 0" class="ops" :value="archiveData" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" dataKey="id" filterDisplay="row" :globalFilterFields="['name', 'docType', 'docNr', 'vat', 'docCurrency', 'client.name']">
+						<template #header>
+							<div class="flex justify-content-end">
+								<i class="pi pi-search" />
+								<input v-model="filters['global'].value" placeholder="Keyword Search" />
+							</div>
+						</template>
+						<Column field="docNr" sortable header="Doc Nr"></Column>
+						<Column field="docType" sortable header="Doc Type">
+							<template #body="slotprops">
+								{{ invoiceTypes[slotprops.data.docType].name }}
+							</template>
+						</Column>
+						<Column field="client.name" sortable  header="Client Name"></Column>
+						<Column field="docDate" sortable header="Doc Date">
+							<template #body="slotprops">
+								{{ new Date(slotprops.data.docDate).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) }}
+							</template>
+						</Column>
+						<Column field="vat" sortable header="VAT value">
+							<template #body="slotprops">
+								{{ slotprops.data.vat }}%
+							</template>
+						</Column>
+						<Column field="docCurrency" sortable  header="Doc Currency"></Column>
+						<Column header="Modify">
+							<template #body="slotprops">
+								<i class="pi pi-info-circle" @click="() => {editableEntity = slotprops.data; editOn = 9;}"></i>
+								<i class="pi pi-download" @click="() => {}"></i>
+								<i class="pi pi-replay" @click="() => {}"></i>
+							</template>
+						</Column>
+					</DataTable>
+					<div class="head" v-else>
+						<h2>You have no archived invoices</h2>
 					</div>
 				</div>
 
@@ -295,6 +334,51 @@
 				</div>
 			</div>
 		</div>
+		<div v-if="editOn == 9" class="invoiceDetails">
+			<div class="header"> <h1>Invoice Details</h1> <i class="pi pi-times" @click="() => {editOn = 0}"></i> </div>
+			<div v-if="editableEntity" class="info">
+				<h2>Invoice Number: {{ editableEntity.docNr }}</h2>
+				<div class="infoDivider">
+					<div>
+						<h2>Company details used:</h2>
+						<ul>
+							<li>{{ editableEntity.company.name }}</li>
+							<li>{{ editableEntity.company.orgReg }}</li>
+							<li>{{ editableEntity.company.cif }}</li>
+							<li>{{ editableEntity.company.address }}</li>
+							<li>{{ editableEntity.company.bank }}</li>
+							<li>{{ editableEntity.company.account }}</li>
+						</ul>
+					</div>
+					<div>
+						<h2>Client details:</h2>
+						<ul>
+							<li>{{ editableEntity.client.name }}</li>
+							<li>{{ editableEntity.client.orgReg }}</li>
+							<li>{{ editableEntity.client.cif }}</li>
+							<li>{{ editableEntity.client.address }}</li>
+							<li>{{ editableEntity.client.bank }}</li>
+							<li>{{ editableEntity.client.account }}</li>
+						</ul>
+					</div>
+				</div>
+				<h2>Products listed on the invoice:</h2>
+				<DataTable v-if="editableEntity.products.length > 0" class="ops" :value="editableEntity.products" paginator :rows="5" v-model:filters="filters" dataKey="id" filterDisplay="row" :globalFilterFields="['name', 'price']">
+					<template #header>
+						<div class="flex justify-content-end">
+							<i class="pi pi-search" />
+							<input v-model="filters['global'].value" placeholder="Keyword Search" />
+						</div>
+					</template>
+					<Column field="name" sortable header="Name"></Column>
+					<Column field="price" sortable header="Price"></Column>
+				</DataTable>
+
+				<div class="smallPrimaryButton" @click="() => {editOn = 0}">
+					<h1>Done</h1>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<UserAuth v-else />
@@ -306,9 +390,7 @@ import MessageWindow from '../support/MessageWindow.vue'
 import UserAuth from '../auth/Auth.vue'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-// import ColumnGroup from 'primevue/columngroup';   // optional
-// import Row from 'primevue/row';                   // optional
-
+import Chart from 'primevue/chart';
 
 export default{
 	name: "ProfilePage",
@@ -316,14 +398,13 @@ export default{
 		MessageWindow,
 		UserAuth,
 		DataTable,
-		Column
+		Column,
+		Chart
 	},
 	setup(){
 		var loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		var updatedUser = JSON.parse(JSON.stringify(loggedUser));
 
-		console.log(loggedUser);
-		
 		var newClientTemplate = {
 			name: "",
 			orgReg: "",
@@ -341,7 +422,7 @@ export default{
 			loggedUser,
 			updatedUser,
 			newClientTemplate,
-			newProductTemplate
+			newProductTemplate,
 		}
 	},
 	data(){
@@ -360,10 +441,91 @@ export default{
 					value: ''
 				}
 			},
+			invoiceTypes: [
+				{
+					id: 0,
+					name: "FISCAL INVOICE"
+				},
+				{
+					id: 1,
+					name: "PROFORMA INVOICE"
+				},
+			],
+
+			archiveData: [],
+			chartData: {
+				labels: [],
+				datasets: [
+					{
+						label: 'Sales',
+						data: [],
+						backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+						borderColor: ['rgb(255, 159, 64)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)'],
+						borderWidth: 1
+					}
+				]
+			},
+			chartOptions: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			},
 		}
 	},
 	watch: {
+		bottomSectionController: async function(value){
+			if((value == 3 || value == 2) && this.archiveData.length == 0){
+				try{
+					await fetch(process.env.VUE_APP_INVOICES + "/users/" + this.loggedUser._id,
+					{
+						method: "GET",
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					})
+					.then((response) => response.json())
+					.then((res) => {
+						this.archiveData = res;
+					})
+				}
+				catch(error){
+					this.openMessageBoard(error.message);
+				}
 
+				let sortedData = this.archiveData.sort((a, b) => {return new Date(a.docDate) - new Date(b.docDate)})
+
+				sortedData.forEach((item) => {
+					let date = new Date(item.docDate);
+					let month = date.toLocaleString('en-US', { month: 'long' });
+
+					if( !this.chartData.labels.includes(month) ){
+						this.chartData.labels.push(month);
+					}
+				});
+
+				this.chartData.labels.forEach((item) =>{
+					sortedData.forEach((sItem) => {
+						let date = new Date(sItem.docDate);
+						let month = date.toLocaleString('en-US', { month: 'long' });
+
+						if( month == item ){
+							let sum = 0;
+
+							sItem.products.forEach((prod) => {
+								let value = Number(prod.qPrice) + ((Number(prod.qPrice) * Number(sItem.vat)) / 100)
+								sum += value;
+							})
+
+							this.chartData.datasets[0].data.push(sum);
+						}
+					});
+				})
+			}
+
+			return
+		}
 	},
 	mounted(){
 		this.newClient = this.newClientTemplate;

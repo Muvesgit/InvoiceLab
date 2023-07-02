@@ -557,23 +557,34 @@ body{
   margin: 0 auto;
 }
 
-.editData .header, .confirmData .header{
+.invoiceDetails {
+	position: fixed;
+	z-index: 101;
+	background-color: white;
+	height: 40vw;
+	width: 50vw;
+	top: 5%;
+	left: 27%;
+	margin: 0 auto;
+}
+
+.editData .header, .confirmData .header, .invoiceDetails .header{
   display: flex;
   justify-content: space-between;
   padding: 1vw 2vw;
   align-items: center;
 }
 
-.editData .header i, .confirmData .header i{
+.editData .header i, .confirmData .header i, .invoiceDetails .header i{
   cursor: pointer;
   transition: all .3s;
 }
 
-.editData .header i:hover, .confirmData .header i:hover{
+.editData .header i:hover, .confirmData .header i:hover, .invoiceDetails .header .p-inputtext:enabled:hover{
   color: var(--prefGrey);
 }
 
-.editData .header h1, .confirmData .header i{
+.editData .header h1, .confirmData .header i, .invoiceDetails .header i{
   font-size: 1.5vw;
 }
 
@@ -584,7 +595,7 @@ body{
   padding: 0 2vw;
 }
 
-.editData .info{
+.editData .info, .invoiceDetails .info{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -592,7 +603,7 @@ body{
   height: 25vw;
 }
 
-.editData .info h2, .confirmData .info h2{
+.editData .info h2, .confirmData .info h2, .invoiceDetails .info h2{
   margin: 0;
   font-weight: 400;
   font-size: 1vw;
@@ -612,6 +623,15 @@ body{
 .contentSection .ops i{
   font-size: 1vw;
   margin: 0.2vw;
+}
+
+.invoiceDetails .infoDivider{
+	display: flex;
+	justify-content: space-between;
+}
+
+.invoiceDetails .infoDivider div{
+	width: 49%;
 }
 
 
@@ -1339,4 +1359,21 @@ body{
 
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight:focus{
   box-shadow: inset 0 0 0 0.2rem var(--primaryColor) !important;
+}
+
+.p-datatable .p-sortable-column.p-highlight{
+  background: white !important;
+  color: var(--primaryColor) !important;
+}
+
+.p-datatable .p-sortable-column:focus{
+  box-shadow: inset 0 0 0 0.2rem var(--primaryColor) !important;
+}
+
+.p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon{
+  color: var(--primaryColor) !important;
+}
+
+.p-datatable .p-column-header-content{
+  background: white;
 }
